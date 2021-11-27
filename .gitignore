@@ -1,0 +1,11 @@
+node_modules
+
+# production
+dist
+build
+
+# next.js
+.next
+
+# vscode
+.vscode
