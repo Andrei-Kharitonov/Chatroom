@@ -1,0 +1,54 @@
+.nav {
+  margin-right: 30px;
+  flex: 1 1 auto;
+  &__body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    @media (max-width: 600px) {
+      display: none;
+      &_active {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 71px;
+        left: 0;
+        background-color: #fff;
+        z-index: 100;
+      }
+    }
+  }
+  &__link {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 5px;
+    transition: 0.3s;
+    &:hover {
+      color: #0066FF;
+    }
+    @media (max-width: 600px) {
+      font-size: 30px;
+    }
+  }
+}
+
+.iconMenu {
+  display: none;
+  @media (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 37px;
+    height: 30px;
+    cursor: pointer;
+    span {
+      background: #000;
+      width: 100%;
+      height: 4px;
+    }
+  }
+}

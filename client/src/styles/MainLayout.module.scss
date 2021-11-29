@@ -1,0 +1,35 @@
+.header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #000;
+}
+
+.user {
+  width: 250px;
+  display: flex;
+  @media (max-width: 375px) {
+    width: 230px;
+  }
+  &__avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+  }
+  &__info {
+    margin-left: 15px;
+  }
+  &__name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  &__post {
+    font-size: 15px;
+    font-weight: 500;
+    color: #777;
+  }
+}
+
