@@ -7,6 +7,7 @@ class MyDocument extends Document {
         <Head>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
           <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+          <title>Chatroom</title>
         </Head>
         <body>
           <Main />

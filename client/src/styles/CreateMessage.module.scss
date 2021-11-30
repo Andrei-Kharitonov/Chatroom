@@ -1,0 +1,31 @@
+.createMessage {
+  box-sizing: border-box;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  border-top: 1px solid #000;
+  &__form {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__input {
+    display: block;
+    width: 100%;
+    margin-right: 15px;
+    border: none;
+    border-bottom: 1px solid #000;
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid #06f;
+    }
+  }
+  &__send {
+    background: #3E8BFF;
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    padding: 9px 12px;
+    line-height: 0.7;
+    border-radius: 100px;
+  }
+}

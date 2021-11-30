@@ -21,7 +21,7 @@ export default function Navigation(): JSX.Element {
         <Link href="/">
           <a
             className={styles.nav__link}
-            style={{ color: url == '/' ? '#0066FF' : 'inherit' }}
+            style={{ color: url == '/' ? '#0066FF' : '' }}
             onClick={() => setActive(false)}
           >
             Chatroom
@@ -30,7 +30,7 @@ export default function Navigation(): JSX.Element {
         <Link href="/sign-up">
           <a
             className={styles.nav__link}
-            style={{ color: url == '/sign-up' ? '#0066FF' : 'inherit' }}
+            style={{ color: url == '/sign-up' ? '#0066FF' : '' }}
             onClick={() => setActive(false)}
           >
             Регистрация
@@ -39,7 +39,7 @@ export default function Navigation(): JSX.Element {
         <Link href="/sign-in">
           <a
             className={styles.nav__link}
-            style={{ color: url == '/sign-in' ? '#0066FF' : 'inherit' }}
+            style={{ color: url == '/sign-in' ? '#0066FF' : '' }}
             onClick={() => setActive(false)}
           >
             Войти
@@ -48,7 +48,7 @@ export default function Navigation(): JSX.Element {
         <Link href="/profile">
           <a
             className={styles.nav__link}
-            style={{ color: url == '/profile' ? '#0066FF' : 'inherit' }}
+            style={{ color: url == '/profile' ? '#0066FF' : '' }}
             onClick={() => setActive(false)}
           >
             Профиль
@@ -57,7 +57,7 @@ export default function Navigation(): JSX.Element {
         <Link href="/help">
           <a
             className={styles.nav__link}
-            style={{ color: url == '/help' ? '#0066FF' : 'inherit' }}
+            style={{ color: url == '/help' ? '#0066FF' : '' }}
             onClick={() => setActive(false)}
           >
             Помощь
