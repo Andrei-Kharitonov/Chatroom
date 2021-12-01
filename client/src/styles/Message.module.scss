@@ -25,14 +25,18 @@
 }
 
 .MyMessage {
-  display: inline-block;
-  position: absolute;
-  right: 0;
+  box-sizing: border-box;
+  max-width: 80%;
+  min-width: 50px;
   margin: 3px 0;
+  margin-left: auto;
   padding: 7px 13px;
-  background: #3E8BFF;
+  background: #4d94ff;
   border-radius: 10px 0 10px 10px;
   overflow: hidden;
+  @media (max-width: 730px) {
+    max-width: 90%;
+  }
   &__author {
     margin-bottom: 5px;
   }
@@ -44,6 +48,5 @@
   }
   &__text {
     color: #fff;
-    text-align: right;
   }
 }

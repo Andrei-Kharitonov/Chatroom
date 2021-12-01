@@ -13,6 +13,7 @@
     width: 220px;
   }
   &__avatar {
+    flex: 0 0 40px;
     border-radius: 50%;
     overflow: hidden;
     width: 40px;
@@ -25,9 +26,12 @@
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 3px;
-    overflow: hidden;
     a {
+      display: block;
+      width: 180px;
+      overflow: hidden;
       white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
   &__post {

@@ -10,13 +10,9 @@ export default function User({ name, post }: UserProps): JSX.Element {
   let [active, setActive] = useState(false);
   let avatarImg = false;
 
-  useEffect(() => {
-    setActive(active);
-  }, [active]);
-
   return (
     <div className={styles.user}>
-      <div className={styles.user__body}>
+      <div className={styles.user__body} onClick={() => setActive(false)}>
         <div
           className={styles.user__avatar}
           style={{ background: avatarImg ? '' : '#c4c4c4' }}
