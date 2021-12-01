@@ -3,7 +3,7 @@
   height: 50px;
   width: 100%;
   padding: 10px;
-  border-top: 1px solid #000;
+  border-top: 1px solid #999;
   &__form {
     display: flex;
     justify-content: space-between;
@@ -13,7 +13,7 @@
     width: 100%;
     margin-right: 15px;
     border: none;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #999;
     &:focus {
       outline: none;
       border-bottom: 1px solid #06f;
@@ -27,5 +27,9 @@
     padding: 9px 12px;
     line-height: 0.7;
     border-radius: 100px;
+    cursor: pointer;
+    @media (max-width: 360px) {
+      font-size: 14px;
+    }
   }
 }

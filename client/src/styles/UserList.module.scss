@@ -1,77 +1,51 @@
 .userList {
   width: 50%;
   height: 100%;
-  border-right: 1px solid #000;
+  position: relative;
+  border-right: 1px solid #999;
   @media (max-width: 730px) {
-    width: 5px;
+    display: flex;
+    position: absolute;
+    width: calc(100vw - 35px);
+    height: calc(100vh - 71px);
+    background: #fff;
+    transform: translate(calc(-100vw + 34px), 0);
+    transition: 0.3s;
+  }
+  &_active {
+    @media (max-width: 730px) {
+      transform: translate(-10px, 0);
+      box-shadow: 36px 0 0 rgba(0, 0, 0, 0.5);
+    }
+    .userList__body {
+      display: block;
+      width: 100%;
+      padding-bottom: 30px;
+      box-sizing: border-box;
+    }
   }
   &__body {
     overflow: auto;
-    padding: 10px;
+    height: 100%;
     @media (max-width: 730px) {
-      transform: translate(-1000px, calc(-100vh + 70px));
-      width: calc(100vw - 50px);
-      &_active {
-        box-sizing: border-box;
-        padding: 10px;
-        transform: translate(0, calc(-100vh + 71px));
-        background: #fff;
-        box-shadow: 36px 0 0 rgba(0, 0, 0, 0.5);
-        width: calc(100vw - 35px);
-        height: calc(100vh - 71px);
-      }
+      display: none;
     }
   }
   &__icon {
     display: none;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: calc(50vh - 71px);
+    left: 100%;
+    background: #fff;
+    border: 1px solid #999;
+    border-radius: 0 100px 100px 0;
+    font-size: 30px;
+    line-height: 0.65;
+    text-align: center;
     @media (max-width: 730px) {
       display: block;
-      position: relative;
-      width: 5px;
-      height: 100%;
-      background: #fff;
-      border-right: 1px solid #999;
-      z-index: 100;
-      span {
-        display: block;
-        position: absolute;
-        width: 25px;
-        height: 25px;
-        top: calc(50vh - 71px);
-        left: 100%;
-        background: #fff;
-        border: 1px solid #999;
-        border-radius: 0 100px 100px 0;
-        font-size: 30px;
-        line-height: 0.65;
-        text-align: center;
-      }
-    }
-    &_active {
-      right: calc(-100vw + 36px);
-      @media (max-width: 730px) {
-        display: block;
-        position: relative;
-        width: 5px;
-        height: 100%;
-        background: #fff;
-        border-right: 1px solid #999;
-        z-index: 100;
-        span {
-          display: block;
-          position: absolute;
-          width: 25px;
-          height: 25px;
-          top: calc(50vh - 70px);
-          left: 100%;
-          background: #fff;
-          border: 1px solid #999;
-          border-radius: 0 100px 100px 0;
-          font-size: 30px;
-          line-height: 0.65;
-          text-align: center;
-        }
-      }
     }
   }
 }

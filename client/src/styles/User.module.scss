@@ -1,0 +1,75 @@
+.user {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #999;
+  position: relative;
+  &__body {
+    display: flex;
+  }
+  &__avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+  }
+  &__info {
+    margin-left: 15px;
+  }
+  &__name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  &__post {
+    font-size: 15px;
+    font-weight: 500;
+    color: #777;
+  }
+  &__optionsList {
+    display: none;
+    &_active {
+      display: block;
+      position: absolute;
+      right: 5px;
+      width: 160px;
+      background: #fff;
+      border: 1px solid #999;
+      border-radius: 5px;
+      z-index: 100;
+    }
+  }
+  &__option {
+    border-bottom: 1px solid #999;
+    padding: 5px;
+    cursor: pointer;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  &__optionsIcon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 100px;
+    overflow: hidden;
+    transition: 0.2s;
+    &:hover {
+      background: #e7e7e7;
+    }
+    span {
+      display: block;
+      width: 6px;
+      height: 6px;
+      background: #999;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+  }
+}
