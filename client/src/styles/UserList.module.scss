@@ -3,6 +3,7 @@
   height: 100%;
   position: relative;
   border-right: 1px solid #999;
+  z-index: 100;
   @media (max-width: 730px) {
     display: flex;
     position: absolute;

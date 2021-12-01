@@ -1,0 +1,49 @@
+.message {
+  display: inline-block;
+  margin: 3px 0;
+  padding: 7px 13px;
+  background: #d9d9d9;
+  border-radius: 0 10px 10px 10px;
+  overflow: hidden;
+  &__author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  &__authorAvatar {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    background: #999;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  &__authorName {
+    font-weight: 500;
+    font-size: 16px;
+  }
+}
+
+.MyMessage {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  margin: 3px 0;
+  padding: 7px 13px;
+  background: #3E8BFF;
+  border-radius: 10px 0 10px 10px;
+  overflow: hidden;
+  &__author {
+    margin-bottom: 5px;
+  }
+  &__MyName {
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+    text-align: right;
+  }
+  &__text {
+    color: #fff;
+    text-align: right;
+  }
+}

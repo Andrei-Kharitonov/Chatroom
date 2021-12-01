@@ -39,7 +39,7 @@ export default function UserList(): JSX.Element {
   return (
     <div className={active ? styles.userList + ' ' + styles.userList_active : styles.userList}>
       <ul className={styles.userList__body}>
-        {users.map((user) => {
+        {users.map(user => {
           return (
             <li key={user.id}>
               <User name={user.name} post={user.post} />
