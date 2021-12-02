@@ -33,7 +33,7 @@ export default function Auth({ btnText }: AuthProps): JSX.Element {
           value={pwd}
           onChange={e => setPwd(e.target.value)}
         />
-        <button className={styles.btn} type="submit">
+        <button className="btn" type="submit">
           {btnText}
         </button>
       </form>

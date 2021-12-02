@@ -1,16 +1,17 @@
 import Link from 'next/link'
-import Auth from "../components/auth/auth";
+import styles from '../styles/authPage.module.scss';
+import Auth from '../components/auth/auth';
 
 export default function SignUp(): JSX.Element {
   return (
-    <div style={{ paddingTop: '30px' }}>
-      <h2 style={{ textAlign: 'center', fontSize: '26px', margin: '0 0 18px 0' }}>
+    <div className={styles.container}>
+      <h2 className="title">
         Создать аккаунт
       </h2>
       <Auth btnText="Зарегистрироваться" />
-      <p style={{ marginTop: '35px', fontSize: '18px', textAlign: 'center' }}>
+      <p className={styles.text}>
         <Link href="/sign-in">
-          <a style={{ color: '#0066FF', textDecoration: 'underline' }}>
+          <a>
             Войдите в аккаунт
           </a>
         </Link>
