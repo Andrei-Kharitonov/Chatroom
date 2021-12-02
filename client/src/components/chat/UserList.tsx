@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/UserList.module.scss';
+import styles from './styles/UserList.module.scss';
 import User from './User';
 
 export default function UserList(): JSX.Element {

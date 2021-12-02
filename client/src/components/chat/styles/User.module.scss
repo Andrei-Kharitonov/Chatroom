@@ -50,14 +50,15 @@
     padding: 5px;
     cursor: pointer;
     &:hover {
-      background: #ececec;
+      background: #6ea8ff;
+      color: #fff;
     }
     &:last-child {
       border-bottom: none;
     }
   }
   &__optionsIcon {
-    width: 33px;
+    width: 30px;
     height: 33px;
     box-sizing: border-box;
     padding: 3px 0;

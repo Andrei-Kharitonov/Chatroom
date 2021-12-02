@@ -2,25 +2,13 @@
   display: inline-block;
   margin: 3px 0;
   padding: 7px 13px;
-  background: #d9d9d9;
+  background: #e6e6e6;
   border-radius: 0 10px 10px 10px;
   overflow: hidden;
   &__author {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  &__authorAvatar {
-    width: 20px;
-    height: 20px;
-    margin-right: 6px;
-    background: #999;
-    border-radius: 100px;
-    overflow: hidden;
-  }
-  &__authorName {
     font-weight: 500;
     font-size: 16px;
+    margin-bottom: 5px;
   }
 }
 
@@ -39,8 +27,6 @@
   }
   &__author {
     margin-bottom: 5px;
-  }
-  &__MyName {
     font-weight: 500;
     font-size: 16px;
     color: #fff;

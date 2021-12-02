@@ -1,10 +1,9 @@
-import Chat from '../components/Chat';
-import UserList from '../components/UserList';
-import styles from '../styles/index.module.scss';
+import Chat from '../components/chat/Chat';
+import UserList from '../components/chat/UserList';
 
 export default function Home(): JSX.Element {
   return (
-    <div className={styles.main__container}>
+    <div className="main-container">
       <UserList />
       <Chat />
     </div>

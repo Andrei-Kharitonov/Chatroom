@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import styles from '../styles/Navigation.module.scss';
+import styles from './styles/Navigation.module.scss';
 
 export default function Navigation(): JSX.Element {
   let [url, setUrl] = useState('');

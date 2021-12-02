@@ -1,0 +1,34 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #999;
+  margin-bottom: 20px;
+  padding: 8px;
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid #06f;
+  }
+}
+
+.btn {
+  background: #3E8BFF;
+  border: 2px solid #257cff;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 2px 2px 5px #ccc;
+  }
+}

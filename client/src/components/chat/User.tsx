@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/User.module.scss';
+import styles from './styles/User.module.scss';
 
 interface UserProps {
   name: string,

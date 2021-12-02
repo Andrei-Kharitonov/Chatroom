@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import styles from '../styles/CreateMessage.module.scss';
+import styles from './styles/CreateMessage.module.scss';
 
 export default function CreateMessage(): JSX.Element {
   let [value, setValue] = useState('');

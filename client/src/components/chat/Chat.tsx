@@ -1,4 +1,4 @@
-import styles from '../styles/Chat.module.scss';
+import styles from './styles/Chat.module.scss';
 import CreateMessage from './CreateMessage';
 import Message from './Message';
 

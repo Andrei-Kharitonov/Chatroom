@@ -1,4 +1,4 @@
-import styles from '../styles/Message.module.scss';
+import styles from './styles/Message.module.scss';
 
 interface MessageProps {
   authorName: string,
@@ -10,7 +10,7 @@ export default function Message({ text, authorName }: MessageProps): JSX.Element
     return (
       <div className={styles.MyMessage}>
         <div className={styles.MyMessage__author}>
-          <div className={styles.MyMessage__MyName}>Вы</div>
+          Вы
         </div>
         <div className={styles.MyMessage__text}>{text}</div>
       </div>
@@ -19,8 +19,7 @@ export default function Message({ text, authorName }: MessageProps): JSX.Element
     return (
       <div className={styles.message}>
         <div className={styles.message__author}>
-          <div className={styles.message__authorAvatar}></div>
-          <div className={styles.message__authorName}>{authorName}</div>
+          {authorName}
         </div>
         <div className={styles.message__text}>{text}</div>
       </div>
