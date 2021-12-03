@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/Profile.module.scss'
+import styles from '../styles/ProfilePage.module.scss';
 
 interface ProfileProps {
   name: string,
@@ -15,10 +15,17 @@ export default function Profile({ name, post }: ProfileProps): JSX.Element {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="content-container">
       <h2 className="title">Ваш профиль</h2>
       <form className={styles.body} onSubmit={formHandler}>
-        <div className={styles.userAvatar}></div>
+        <div className={styles.userAvatar}>
+          <div className={styles.avatarImg}></div>
+          <div className={styles.inputImg}>
+            <input type="file" />
+            <label className="btn">Выбрать фото</label>
+          </div>
+
+        </div>
         <div className={styles.userInfo}>
           <input
             className={styles.userName}

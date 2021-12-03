@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import styles from './styles/auth.module.scss';
 
 interface AuthProps {
@@ -9,7 +9,7 @@ export default function Auth({ btnText }: AuthProps): JSX.Element {
   let [name, setName] = useState('');
   let [pwd, setPwd] = useState('');
 
-  function formHandler(event: any) {
+  function formHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     console.log(name);
@@ -17,8 +17,8 @@ export default function Auth({ btnText }: AuthProps): JSX.Element {
   }
 
   return (
-    <div className={styles.container}>
-      <form className={styles.form} onSubmit={formHandler}>
+    <div className="content-container">
+      <form onSubmit={formHandler}>
         <input
           className={styles.input}
           type="text"

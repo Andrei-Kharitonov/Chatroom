@@ -8,7 +8,7 @@ export default function (): JSX.Element {
       <h2 className="title">
         Войти в аккаунт
       </h2>
-      <Auth btnText="Войти" />
+      <Auth btnText="Войти в систему" />
       <p className={styles.text}>
         <Link href="/sign-up">
           <a>

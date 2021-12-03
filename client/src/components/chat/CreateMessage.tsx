@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import axios from 'axios';
 import styles from './styles/CreateMessage.module.scss';
 
 export default function CreateMessage(): JSX.Element {
@@ -6,9 +7,16 @@ export default function CreateMessage(): JSX.Element {
 
   function formHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(value);
 
-    setValue('');
+    axios.post('http://localhost:3000/create', {
+      text: value
+    })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   return (
