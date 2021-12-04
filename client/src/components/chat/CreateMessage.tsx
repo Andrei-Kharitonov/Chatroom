@@ -8,11 +8,12 @@ export default function CreateMessage(): JSX.Element {
   function formHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    axios.post('http://localhost:3000/create', {
+    axios.post('http://localhost:5000/create', {
       text: value
     })
       .then(response => {
         console.log(response.data);
+        setValue('');
       })
       .catch(error => {
         console.log(error);

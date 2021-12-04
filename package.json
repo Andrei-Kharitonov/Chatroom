@@ -1,0 +1,10 @@
+{
+  "name": "chatroom",
+  "private": true,
+  "scripts": {
+    "dev": "cd ./server && concurrently \"npm run start:dev\" \"npm run start:client\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0"
+  }
+}
