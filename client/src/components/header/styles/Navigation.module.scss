@@ -7,18 +7,25 @@
     align-items: center;
     flex-wrap: wrap;
     flex: 1 1 auto;
+    transition: 0.3s;
     @media (max-width: 730px) {
-      display: none;
+      transform: translate(0, -100vh);
+      position: fixed;
+      width: 100vw;
+      height: calc(100vh - 70px);
+      background-color: #fff;
       &_active {
+        transition: 0.3s;
         display: flex;
+        transform: translate(0, 0);
         flex-direction: column;
         position: fixed;
         width: 100%;
         height: calc(100vh - 70px);
         top: 71px;
         left: 0;
-        padding-bottom: 70px;
         background-color: #fff;
+        padding-bottom: 70px;
         overflow: auto;
         z-index: 1000;
       }

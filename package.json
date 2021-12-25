@@ -2,7 +2,9 @@
   "name": "chatroom",
   "private": true,
   "scripts": {
-    "dev": "cd ./server && concurrently \"npm run start:dev\" \"npm run start:client\""
+    "dev": "cd ./server && concurrently \"npm run start:dev\" \"npm run start:client\"",
+    "client": "cd ./client && npm run dev",
+    "server": "cd ./server && npm run start:dev"
   },
   "devDependencies": {
     "concurrently": "^6.4.0"

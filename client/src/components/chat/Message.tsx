@@ -19,7 +19,12 @@ export default function Message({ text, authorName }: MessageProps): JSX.Element
     return (
       <div className={styles.message}>
         <div className={styles.message__author}>
-          {authorName}
+          <div className={styles.message__authorAvatar}>
+            <div></div>
+          </div>
+          <div className={styles.message__authorName}>
+            {authorName}
+          </div>
         </div>
         <div className={styles.message__text}>{text}</div>
       </div>

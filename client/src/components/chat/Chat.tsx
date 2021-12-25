@@ -17,8 +17,12 @@ export default function Chat(): JSX.Element {
     {
       authorName: 'Андрей Харитонов',
       id: 3,
-      //text: 'some text'
       text: 'some text 123 1234 2135 12435 dfhg wer wgh wethy sthj sth weryw the rwhyw erhgdfj dfthst herh s.'
+    },
+    {
+      authorName: 'Петя',
+      id: 4,
+      text: 'some text 123 1234 213125 wer wgh wethy sthj sth weryw the rwhyw erhgj dfthst herh s.'
     }
   ];
 

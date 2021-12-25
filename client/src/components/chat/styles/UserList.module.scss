@@ -16,7 +16,7 @@
   &_active {
     @media (max-width: 730px) {
       transform: translate(0, 0);
-      box-shadow: 35px 0 0 rgba(0, 0, 0, 0.5);
+      box-shadow: 50px 0 0 rgba(0, 0, 0, 0.5);
     }
     .userList__body {
       display: block;
@@ -35,15 +35,15 @@
   &__icon {
     display: none;
     position: absolute;
-    width: 21px;
-    height: 25px;
+    width: 28px;
+    height: 30px;
     top: calc(50vh - 71px);
     left: 100%;
     background: #fff;
     border: 1px solid #999;
     border-radius: 0 100px 100px 0;
     font-size: 30px;
-    line-height: 0.65;
+    line-height: 0.85;
     text-align: center;
     @media (max-width: 730px) {
       display: block;
