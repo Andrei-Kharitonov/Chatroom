@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from '../styles/authPage.module.scss';
 import Auth from "../components/auth/auth";
 
-export default function (): JSX.Element {
+export default function SignIn(): JSX.Element {
   return (
     <div className={styles.container}>
       <h2 className="title">
