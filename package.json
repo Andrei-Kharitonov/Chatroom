@@ -8,6 +8,18 @@
     "server": "cd ./server && npm run start:dev"
   },
   "dependencies": {
-    "concurrently": "^6.5.1"
+    "concurrently": "^6.5.1",
+    "axios": "^0.24.0",
+    "next": "12.0.4",
+    "normalize.css": "^8.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "sass": "^1.43.5",
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/platform-express": "^8.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.2.0"
   }
 }
