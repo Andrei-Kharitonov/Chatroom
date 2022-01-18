@@ -1,19 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { AppService } from './app.service';
-import { CreateMessageDto } from './dto/create-message.dto';
+import { Controller, Get, Redirect } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
-
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
-  @Post('/create')
-  createMessage(@Body() createMessage: CreateMessageDto): string {
-    return `new message: ${createMessage.text}`;
-  }
-
+  @Redirect('http://localhost:3000')
+  get(): void { }
 }
