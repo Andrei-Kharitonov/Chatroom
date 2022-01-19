@@ -6,7 +6,12 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://andr:Qwerty13DB@messages.cfjcz.mongodb.net/messages?retryWrites=true&w=majority'),
+    MongooseModule.forRoot('mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/users?retryWrites=true&w=majority', {
+      connectionName: 'users'
+    }),
+    MongooseModule.forRoot('mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/messages?retryWrites=true&w=majority', {
+      connectionName: 'messages'
+    }),
     UserModule,
     MessageModule
   ],
