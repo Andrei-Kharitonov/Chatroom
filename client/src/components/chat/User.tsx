@@ -24,7 +24,7 @@ export default function User({ name, post }: UserProps): JSX.Element {
             {name}
           </div>
           <div className={styles.user__post}>
-            {post}
+            {post[0].toUpperCase() + post.slice(1)}
           </div>
         </div>
       </div>

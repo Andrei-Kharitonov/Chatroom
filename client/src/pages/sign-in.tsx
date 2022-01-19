@@ -8,7 +8,7 @@ export default function SignIn(): JSX.Element {
       <h2 className="title">
         Войти в аккаунт
       </h2>
-      <Auth btnText="Войти в систему" />
+      <Auth btnText="Войти в систему" move="" />
       <p className={styles.text}>
         <Link href="/sign-up">
           <a>
