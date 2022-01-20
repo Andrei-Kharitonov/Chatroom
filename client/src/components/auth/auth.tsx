@@ -1,36 +1,25 @@
 import { FormEvent, useState } from 'react';
 import Router from 'next/router'
-import axios from 'axios';
 import styles from './styles/auth.module.scss';
 
 interface AuthProps {
   btnText: string,
-  move: string
+  move: Function
 }
 
 export default function Auth({ btnText, move }: AuthProps): JSX.Element {
   let [name, setName] = useState('');
   let [pwd, setPwd] = useState('');
 
-  function formHandler(event: FormEvent<HTMLFormElement>) {
+  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
     event.preventDefault();
-
     if (pwd.length < 6 || name.length <= 0) return null;
 
-    axios.post(`http://localhost:5000/user/${move}`, {
-      login: name,
-      password: pwd
-    })
-      .then(response => {
-        if (!response.data) {
-          alert("Такое имя уже существует. Выберети другое.")
-        } else {
-          Router.push('/');
-        }
-      })
-      .catch(error => {
-        alert("ERROR! " + error);
-      });
+    let user = await move(name, pwd);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      Router.push('/');
+    }
   }
 
   return (

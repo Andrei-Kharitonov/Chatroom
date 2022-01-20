@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schemas';
@@ -11,6 +11,11 @@ export class UserController {
   @Get('/get-all')
   getAll(): Promise<SecurityUser[] | null> {
     return this.userService.getAll()
+  }
+
+  @Get('/get-by-login')
+  getByLogin(@Query() user: Record<string, any>): Promise<User | null> {
+    return this.userService.getByLogin(user.login, user.password);
   }
 
   @Post('/create')

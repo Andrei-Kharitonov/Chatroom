@@ -25,6 +25,13 @@ export class UserService {
     }
   }
 
+  async getByLogin(login: string, password: string): Promise<User | null> {
+    let user = await this.userModel.findOne({ login });
+    if (user && user.password == password) {
+      return user;
+    } else return null;
+  }
+
   async create(userDto: CreateUserDto): Promise<User | null> {
     let newUser = new this.userModel(userDto);
     let users = await this.getAll();
@@ -35,6 +42,7 @@ export class UserService {
     } else if (sameLogin(users, newUser.login)) {
       return null;
     } else {
+      newUser.post = 'user';
       return newUser.save();
     }
   }

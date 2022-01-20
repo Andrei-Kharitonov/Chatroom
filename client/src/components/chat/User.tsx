@@ -51,6 +51,7 @@ export default function User({ name, post }: UserProps): JSX.Element {
         >
           <div className={styles.user__option}>Заблокировать</div>
           <div className={styles.user__option}>Разблокировать</div>
+          <div className={styles.user__option}>Удалить</div>
         </div>
       </div>
     </div>
