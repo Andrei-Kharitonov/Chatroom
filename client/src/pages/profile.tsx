@@ -1,17 +1,55 @@
-import { useState } from 'react';
+import axios from 'axios';
+import Router from 'next/router';
+import { FormEvent, useEffect, useState } from 'react';
 import styles from '../styles/ProfilePage.module.scss';
+import { User } from '../types/User';
 
-interface ProfileProps {
-  name: string,
-  post: string
-}
+export default function Profile(): JSX.Element {
+  let [user, setUser] = useState({
+    _id: '1',
+    login: 'Anonim',
+    password: '000000',
+    post: 'none',
+    banned: false
+  });
+  let [newName, setNewName] = useState(user.login);
+  let [newPwd, setNewPwd] = useState(user.password);
 
-export default function Profile({ name, post }: ProfileProps): JSX.Element {
-  let [newName, setNewName] = useState(name = 'Андрей Харитонов');
+  useEffect(() => {
+    let localStorageData: User | null = JSON.parse(localStorage.getItem('user')!);
 
-  function formHandler(event: any) {
+    if (localStorageData) {
+      setUser(localStorageData);
+      setNewName(localStorageData.login);
+      setNewPwd(localStorageData.password!);
+    }
+  }, []);
+
+  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
     event.preventDefault();
-    console.log(newName);
+
+    if (newName.length <= 0) {
+      alert("Введите имя!");
+      return null;
+    } if (newPwd.length < 6) {
+      alert("Слишком короткий пароль!");
+      return null;
+    } if (newName.length > 25) {
+      alert("Слишком длинное имя!");
+      return null;
+    }
+
+    let newUser = await axios.put(`http://localhost:5000/user/update/?login=${user.login}&password=${user.password}`, {
+      login: newName,
+      password: newPwd
+    });
+
+    if (newUser.data) {
+      localStorage.setItem('user', JSON.stringify(newUser.data));
+      Router.push('/');
+    } else {
+      alert("Неверно введены данные!")
+    }
   }
 
   return (
@@ -28,11 +66,20 @@ export default function Profile({ name, post }: ProfileProps): JSX.Element {
         </div>
         <div className={styles.userInfo}>
           <input
-            className={styles.userName}
+            className={styles.userInput}
             value={newName}
+            placeholder="Имя"
             onChange={e => setNewName(e.target.value)}
           />
-          <div className={styles.userPost}>{post = 'Admin'}</div>
+          <input
+            className={styles.userInput}
+            value={newPwd}
+            placeholder="Пароль"
+            onChange={e => setNewPwd(e.target.value)}
+          />
+          <div className={styles.userPost}>
+            {user.post[0].toUpperCase() + user.post.slice(1)}
+          </div>
         </div>
         <button className="btn" type="submit">Сохранить</button>
       </form>

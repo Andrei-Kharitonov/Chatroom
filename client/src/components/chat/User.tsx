@@ -1,14 +1,31 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { User as UserI } from '../../types/User';
 import styles from './styles/User.module.scss';
 
 interface UserProps {
+  id: string
   name: string,
   post: string
 }
 
-export default function User({ name, post }: UserProps): JSX.Element {
+export default function User({ id, name, post }: UserProps): JSX.Element {
   let [active, setActive] = useState(false);
+  let [currentUser, setCurrentUser] = useState({
+    _id: '1',
+    login: 'Anonim',
+    password: '000000',
+    post: 'none'
+  })
   let avatarImg = false;
+
+  useEffect(() => {
+    currentUser = JSON.parse(localStorage.getItem('user')!);
+  });
+
+  function removeUser(id: string): void {
+    axios.delete(`http://localhost:5000/user/delete/${id}/?login=${currentUser.login}&password=${currentUser.password}`);
+  }
 
   return (
     <div className={styles.user}>
@@ -49,9 +66,15 @@ export default function User({ name, post }: UserProps): JSX.Element {
           onMouseOver={() => setActive(true)}
           onMouseOut={() => setActive(false)}
         >
-          <div className={styles.user__option}>Заблокировать</div>
-          <div className={styles.user__option}>Разблокировать</div>
-          <div className={styles.user__option}>Удалить</div>
+          <div className={styles.user__option}>
+            Заблокировать
+          </div>
+          <div className={styles.user__option}>
+            Разблокировать
+          </div>
+          <div className={styles.user__option} onClick={() => removeUser(id)}>
+            Удалить
+          </div>
         </div>
       </div>
     </div>

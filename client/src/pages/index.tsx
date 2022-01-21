@@ -24,11 +24,10 @@ function Main({ users }: MainPageProps): JSX.Element {
 export async function getServerSideProps() {
   let users = await axios.get('http://localhost:5000/user/get-all')
     .then(response => {
-      console.log(response.data);
       return response.data;
     })
     .catch(error => {
-      alert("ERROR! " + error);
+      console.log("ERROR! " + error);
     });
 
   return {

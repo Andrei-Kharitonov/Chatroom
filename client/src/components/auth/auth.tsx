@@ -13,7 +13,13 @@ export default function Auth({ btnText, move }: AuthProps): JSX.Element {
 
   async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
     event.preventDefault();
-    if (pwd.length < 6 || name.length <= 0) return null;
+    if (name.length <= 0) {
+      alert("Введите имя!");
+      return null;
+    } if (pwd.length < 6) {
+      alert("Слишком короткий пароль!");
+      return null;
+    }
 
     let user = await move(name, pwd);
     if (user) {
@@ -34,7 +40,7 @@ export default function Auth({ btnText, move }: AuthProps): JSX.Element {
         />
         <input
           className={styles.input}
-          type="password"
+          type="text"
           placeholder="Введите пароль (не короче 6)"
           value={pwd}
           onChange={e => setPwd(e.target.value)}

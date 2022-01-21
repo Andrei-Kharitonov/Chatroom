@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react';
 import styles from './styles/UserList.module.scss';
 import User from './User';
+import { SecurityUser } from '../../types/User'
 
 interface UserListProps {
-  users: UserI[]
-}
-
-interface UserI {
-  login: string,
-  post: string,
-  banned: boolean
+  users: SecurityUser[]
 }
 
 export default function UserList({ users }: UserListProps): JSX.Element {
@@ -25,8 +20,8 @@ export default function UserList({ users }: UserListProps): JSX.Element {
         <ul className={styles.userList__body}>
           {users.map(user => {
             return (
-              <li key={user.login}>
-                <User name={user.login} post={user.post} />
+              <li key={user.id}>
+                <User id={user.id} name={user.login} post={user.post} />
               </li>
             );
           })}
