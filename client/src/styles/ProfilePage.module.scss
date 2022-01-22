@@ -88,10 +88,42 @@
     outline: none;
     border-bottom: 1px solid #666;
   }
+  @media (max-width: 600px) {
+    text-align: center;
+  }
 }
 
 .userPost {
+  margin-top: 5px;
   font-size: 21px;
   font-weight: 500;
   color: #777;
+  @media (max-width: 600px) {
+    text-align: center;
+  }
+}
+
+.btnExit {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  background: #ffae00;
+  border-color: #ff8800;
+}
+
+.btnDelete {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  background: #ff3b09;
+  border-color: #db0000;
+}
+
+.toRegistration {
+  text-align: center;
+  font-size: 20px;
+  a {
+    color: #0066ff;
+    text-decoration: underline;
+  }
 }

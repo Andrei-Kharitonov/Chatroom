@@ -16,6 +16,11 @@ export default function CurrentUser(): JSX.Element {
 
     if (localStorageData) {
       setUser(localStorageData);
+    } else {
+      setUser({
+        login: 'Anonim',
+        post: 'none'
+      });
     }
   }, [url]);
 

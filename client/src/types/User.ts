@@ -1,5 +1,5 @@
 export interface User {
-  _id: string,
+  readonly _id: string,
   login: string,
   password: string,
   post: string,
@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface SecurityUser {
-  id: string,
+  readonly id: string,
   login: string,
   post: string,
   banned: boolean

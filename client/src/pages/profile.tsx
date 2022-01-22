@@ -1,15 +1,17 @@
 import axios from 'axios';
+import Link from 'next/link'
 import Router from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import styles from '../styles/ProfilePage.module.scss';
+import { Role } from '../types/Roles';
 import { User } from '../types/User';
 
 export default function Profile(): JSX.Element {
   let [user, setUser] = useState({
-    _id: '1',
-    login: 'Anonim',
-    password: '000000',
-    post: 'none',
+    _id: '',
+    login: '',
+    password: '',
+    post: '',
     banned: false
   });
   let [newName, setNewName] = useState(user.login);
@@ -27,14 +29,7 @@ export default function Profile(): JSX.Element {
 
   async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
     event.preventDefault();
-
-    if (newName.length <= 0) {
-      alert("Введите имя!");
-      return null;
-    } if (newPwd.length < 6) {
-      alert("Слишком короткий пароль!");
-      return null;
-    } if (newName.length > 25) {
+    if (newName.length > 25) {
       alert("Слишком длинное имя!");
       return null;
     }
@@ -48,7 +43,30 @@ export default function Profile(): JSX.Element {
       localStorage.setItem('user', JSON.stringify(newUser.data));
       Router.push('/');
     } else {
-      alert("Неверно введены данные!")
+      alert("Такое имя уже занято! Попробуйте другое.")
+    }
+  }
+
+  function exitAccount(): void {
+    localStorage.removeItem('user');
+    Router.push('/sign-in');
+  }
+
+  async function removeAccount(user: User): Promise<void> {
+    let queryDel = confirm(`
+      Вы действительно хотите удалить свой аккаунт без возможности восстановления?
+      ${user.post == Role.Admin ? 'Права Администратора будут переданы другому случайному пользователю!' : ''}
+      `);
+
+    if (queryDel) {
+      let deleteUser = await axios.delete(`http://localhost:5000/user/delete-account/?id=${user._id}&login=${user.login}&password=${user.password}`);
+
+      if (deleteUser.data) {
+        localStorage.removeItem('user');
+        Router.push('/sign-up');
+      } else {
+        alert('ERROR!!!');
+      }
     }
   }
 
@@ -78,11 +96,28 @@ export default function Profile(): JSX.Element {
             onChange={e => setNewPwd(e.target.value)}
           />
           <div className={styles.userPost}>
-            {user.post[0].toUpperCase() + user.post.slice(1)}
+            {user.post.length ? user.post[0].toUpperCase() + user.post.slice(1) : 'Post'}
           </div>
         </div>
-        <button className="btn" type="submit">Сохранить</button>
+        <button
+          className="btn"
+          type="submit"
+          disabled={!user._id.length || (user.login === newName || !newName.length) && user.password == newPwd || newPwd.length < 6}>
+          Сохранить изменения
+        </button>
       </form>
+      <button
+        className={"btn " + styles.btnExit}
+        onClick={() => exitAccount()}
+        disabled={!user._id.length}>
+        Выйти из аккаунта
+      </button>
+      <button
+        className={"btn " + styles.btnDelete}
+        onClick={() => removeAccount(user)}
+        disabled={!user._id.length}>
+        Удалить аккаунт
+      </button>
     </div>
   );
 }

@@ -62,4 +62,11 @@ main {
   &:hover {
     box-shadow: 2px 2px 5px #ccc;
   }
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+    &:hover {
+      box-shadow: none;
+    }
+  }
 }

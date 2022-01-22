@@ -13,13 +13,6 @@ export default function Auth({ btnText, move }: AuthProps): JSX.Element {
 
   async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
     event.preventDefault();
-    if (name.length <= 0) {
-      alert("Введите имя!");
-      return null;
-    } if (pwd.length < 6) {
-      alert("Слишком короткий пароль!");
-      return null;
-    }
 
     let user = await move(name, pwd);
     if (user) {
@@ -45,7 +38,10 @@ export default function Auth({ btnText, move }: AuthProps): JSX.Element {
           value={pwd}
           onChange={e => setPwd(e.target.value)}
         />
-        <button className="btn" type="submit">
+        <button
+          className="btn"
+          type="submit"
+          disabled={name.length == 0 || pwd.length < 6}>
           {btnText}
         </button>
       </form>

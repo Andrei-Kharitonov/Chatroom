@@ -63,10 +63,25 @@ export class UserService {
     }
   }
 
-  async remove(id: string, login: string, password: string): Promise<User | null> {
+  async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
 
     if (user && user.post == Role.Admin) {
+      return await this.userModel.findByIdAndRemove({ _id: id });
+    } else {
+      return null
+    }
+  }
+
+  async removeAccount(id: string, login: string, password: string): Promise<User | null> {
+    let user = await this.getByLogin(login, password);
+    let otherUsers = (await this.getAll()).filter(user => user.login !== login);
+    if (user && user.post == Role.Admin) {
+      let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
+      await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { upsert: true, new: true });
+
+      return await this.userModel.findByIdAndRemove({ _id: id });
+    } else if (user) {
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null

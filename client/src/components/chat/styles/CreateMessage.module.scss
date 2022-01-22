@@ -1,8 +1,8 @@
 .createMessage {
   box-sizing: border-box;
-  height: 50px;
+  height: 60px;
   width: 100%;
-  padding: 10px;
+  padding: 15px 8px;
   border-top: 1px solid #999;
   &__form {
     display: flex;
@@ -12,6 +12,7 @@
     display: block;
     width: 100%;
     margin-right: 15px;
+    padding-top: 0;
     border: none;
     border-bottom: 1px solid #999;
     &:focus {
@@ -20,6 +21,7 @@
     }
   }
   &__send {
+    height: 32px;
     background: #3E8BFF;
     border: none;
     font-size: 16px;

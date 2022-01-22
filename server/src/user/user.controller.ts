@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Post, Query, Patch, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Get, Put, Post, Query, Delete, Param } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schemas';
@@ -30,7 +30,12 @@ export class UserController {
   }
 
   @Delete('/delete/:id')
-  remove(@Param('id') id: string, @Query() user: Record<string, any>): Promise<User> {
-    return this.userService.remove(id, user.login, user.password);
+  removeUser(@Param('id') id: string, @Query() user: Record<string, any>): Promise<User> {
+    return this.userService.removeUser(id, user.login, user.password);
+  }
+
+  @Delete('/delete-account')
+  removeAccount(@Query() user: Record<string, any>): Promise<User> {
+    return this.userService.removeAccount(user.id, user.login, user.password);
   }
 }
