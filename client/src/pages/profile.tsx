@@ -11,7 +11,7 @@ export default function Profile(): JSX.Element {
     _id: '',
     login: '',
     password: '',
-    post: '',
+    post: 'none',
     banned: false
   });
   let [newName, setNewName] = useState(user.login);
@@ -27,14 +27,14 @@ export default function Profile(): JSX.Element {
     }
   }, []);
 
-  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
+  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     if (newName.length > 25) {
       alert("Слишком длинное имя!");
-      return null;
+      return;
     }
 
-    let newUser = await axios.put(`http://localhost:5000/user/update/?login=${user.login}&password=${user.password}`, {
+    let newUser = await axios.put(`http://localhost:5000/user/update?login=${user.login}&password=${user.password}`, {
       login: newName,
       password: newPwd
     });
@@ -59,7 +59,7 @@ export default function Profile(): JSX.Element {
       `);
 
     if (queryDel) {
-      let deleteUser = await axios.delete(`http://localhost:5000/user/delete-account/?id=${user._id}&login=${user.login}&password=${user.password}`);
+      let deleteUser = await axios.delete(`http://localhost:5000/user/delete-account?id=${user._id}&login=${user.login}&password=${user.password}`);
 
       if (deleteUser.data) {
         localStorage.removeItem('user');
@@ -87,16 +87,18 @@ export default function Profile(): JSX.Element {
             className={styles.userInput}
             value={newName}
             placeholder="Имя"
+            disabled={!user._id.length}
             onChange={e => setNewName(e.target.value)}
           />
           <input
             className={styles.userInput}
             value={newPwd}
             placeholder="Пароль"
+            disabled={!user._id.length}
             onChange={e => setNewPwd(e.target.value)}
           />
           <div className={styles.userPost}>
-            {user.post.length ? user.post[0].toUpperCase() + user.post.slice(1) : 'Post'}
+            Post: {user.post[0].toUpperCase() + user.post.slice(1)}
           </div>
         </div>
         <button

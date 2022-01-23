@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { Role } from "./roles/role.enum";
@@ -15,9 +16,9 @@ export class UserService {
     let allUsers = this.userModel.find().exec();
 
     if (allUsers) {
-      return (await allUsers).map(user => {
+      return (await allUsers).map((user: User) => {
         return {
-          id: user._id,
+          _id: user._id,
           login: user.login,
           post: user.post,
           banned: user.banned
@@ -30,6 +31,7 @@ export class UserService {
 
   async getByLogin(login: string, password: string): Promise<User | null> {
     let user = await this.userModel.findOne({ login });
+
     if (user && user.password == password) {
       return user;
     } else {
@@ -43,11 +45,13 @@ export class UserService {
 
     if (!users.length) {
       newUser.post = Role.Admin;
+      newUser._id = uuidv4();
       return newUser.save();
     } else if (sameLogin(users, newUser.login)) {
       return null;
     } else {
       newUser.post = Role.User;
+      newUser._id = uuidv4();
       return newUser.save();
     }
   }
@@ -76,10 +80,10 @@ export class UserService {
   async removeAccount(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
     let otherUsers = (await this.getAll()).filter(user => user.login !== login);
-    if (user && user.post == Role.Admin) {
+
+    if (user && otherUsers.length && user.post == Role.Admin) {
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
       await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { upsert: true, new: true });
-
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
       return await this.userModel.findByIdAndRemove({ _id: id });

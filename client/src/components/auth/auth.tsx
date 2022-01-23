@@ -4,17 +4,17 @@ import styles from './styles/auth.module.scss';
 
 interface AuthProps {
   btnText: string,
-  move: Function
+  getUser: Function
 }
 
-export default function Auth({ btnText, move }: AuthProps): JSX.Element {
+export default function Auth({ btnText, getUser }: AuthProps): JSX.Element {
   let [name, setName] = useState('');
   let [pwd, setPwd] = useState('');
 
-  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void | null> {
+  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    let user = await move(name, pwd);
+    let user = await getUser(name, pwd);
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
       Router.push('/');

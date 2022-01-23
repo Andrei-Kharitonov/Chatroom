@@ -4,6 +4,10 @@
   position: relative;
   border-right: 1px solid #999;
   z-index: 100;
+  h3 a {
+    color: #0066ff;
+    text-decoration: underline;
+  }
   @media (max-width: 730px) {
     display: flex;
     position: absolute;

@@ -38,7 +38,7 @@ export default function CurrentUser(): JSX.Element {
       </div>
       <div className={styles.user__info}>
         <div className={styles.user__name}>
-          <Link href="/profile">
+          <Link href={user.post == 'none' ? "/sign-up" : "/profile"}>
             <a>{user.login}</a>
           </Link>
         </div>

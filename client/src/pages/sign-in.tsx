@@ -5,8 +5,8 @@ import Auth from "../components/auth/auth";
 import { User } from '../types/User';
 
 export default function SignIn(): JSX.Element {
-  async function getUser(name: string, pwd: string): Promise<void | User> {
-    let response = await axios.get(`http://localhost:5000/user/get-by-login/?login=${name}&password=${pwd}`);
+  async function getUser(name: string, pwd: string): Promise<User | void> {
+    let response = await axios.get(`http://localhost:5000/user/get-by-login?login=${name}&password=${pwd}`);
 
     if (!response.data) {
       alert("Неверно указано имя пользователя или пароль")
@@ -20,7 +20,7 @@ export default function SignIn(): JSX.Element {
       <h2 className="title">
         Войти в аккаунт
       </h2>
-      <Auth btnText="Войти в систему" move={getUser} />
+      <Auth btnText="Войти в систему" getUser={getUser} />
       <p className={styles.text}>
         <Link href="/sign-up">
           <a>

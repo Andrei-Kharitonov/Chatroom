@@ -5,7 +5,7 @@ import Auth from '../components/auth/auth';
 import { User } from '../types/User';
 
 export default function SignUp(): JSX.Element {
-  async function createUser(name: string, pwd: string): Promise<void | User> {
+  async function createUser(name: string, pwd: string): Promise<User | void> {
     let response = await axios.post('http://localhost:5000/user/create', {
       login: name,
       password: pwd
@@ -23,7 +23,7 @@ export default function SignUp(): JSX.Element {
       <h2 className="title">
         Создать аккаунт
       </h2>
-      <Auth btnText="Зарегистрироваться" move={createUser} />
+      <Auth btnText="Зарегистрироваться" getUser={createUser} />
       <p className={styles.text}>
         <Link href="/sign-in">
           <a>

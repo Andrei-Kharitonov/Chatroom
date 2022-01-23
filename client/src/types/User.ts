@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface SecurityUser {
-  readonly id: string,
+  readonly _id: string,
   login: string,
   post: string,
   banned: boolean

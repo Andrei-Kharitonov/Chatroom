@@ -1,15 +1,10 @@
 import axios from 'axios';
 import Chat from '../components/chat/Chat';
 import UserList from '../components/chat/UserList';
+import { SecurityUser } from '../types/User';
 
 interface MainPageProps {
-  users: User[]
-}
-
-interface User {
-  login: string,
-  post: string,
-  banned: boolean
+  users: SecurityUser[]
 }
 
 function Main({ users }: MainPageProps): JSX.Element {
@@ -22,13 +17,8 @@ function Main({ users }: MainPageProps): JSX.Element {
 }
 
 export async function getServerSideProps() {
-  let users = await axios.get('http://localhost:5000/user/get-all')
-    .then(response => {
-      return response.data;
-    })
-    .catch(error => {
-      console.log("ERROR! " + error);
-    });
+  let res = await axios.get('http://localhost:5000/user/get-all');
+  let users: SecurityUser[] = res.data;
 
   return {
     props: { users }

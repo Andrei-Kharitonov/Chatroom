@@ -3,9 +3,9 @@ import { Prop, Schema } from "@nestjs/mongoose";
 @Schema()
 export class SecurityUser {
   @Prop()
-  id: string;
+  readonly _id: string;
 
-  @Prop()
+  @Prop({ unique: true })
   login: string;
 
   @Prop({ default: 'user' })

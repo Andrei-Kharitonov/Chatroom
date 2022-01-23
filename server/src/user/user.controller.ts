@@ -30,12 +30,12 @@ export class UserController {
   }
 
   @Delete('/delete/:id')
-  removeUser(@Param('id') id: string, @Query() user: Record<string, any>): Promise<User> {
+  removeUser(@Param('id') id: string, @Query() user: Record<string, any>): Promise<User | null> {
     return this.userService.removeUser(id, user.login, user.password);
   }
 
   @Delete('/delete-account')
-  removeAccount(@Query() user: Record<string, any>): Promise<User> {
+  removeAccount(@Query() user: Record<string, any>): Promise<User | null> {
     return this.userService.removeAccount(user.id, user.login, user.password);
   }
 }
