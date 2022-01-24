@@ -1,27 +1,27 @@
 import axios from 'axios';
 import Chat from '../components/chat/Chat';
-import UserList from '../components/chat/UserList';
+import { Message } from '../types/Message';
 import { SecurityUser } from '../types/User';
 
 interface MainPageProps {
-  users: SecurityUser[]
+  users: SecurityUser[],
+  messages: Message[]
 }
 
-function Main({ users }: MainPageProps): JSX.Element {
+function Main({ users, messages }: MainPageProps): JSX.Element {
   return (
-    <div className="main-container">
-      <UserList users={users} />
-      <Chat />
-    </div>
+    <Chat users={users} messages={messages} />
   );
 }
 
 export async function getServerSideProps() {
-  let res = await axios.get('http://localhost:5000/user/get-all');
-  let users: SecurityUser[] = res.data;
+  let resUsers = await axios.get('http://localhost:5000/user/get-all');
+  let resMessages = await axios.get('http://localhost:5000/message/get-all');
+  let users: SecurityUser[] = resUsers.data;
+  let messages: Message[] = resMessages.data;
 
   return {
-    props: { users }
+    props: { users, messages }
   }
 }
 

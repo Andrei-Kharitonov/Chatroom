@@ -1,6 +1,6 @@
 import { Prop, Schema } from "@nestjs/mongoose";
 
-@Schema()
+@Schema({ versionKey: false })
 export class SecurityUser {
   @Prop()
   readonly _id: string;

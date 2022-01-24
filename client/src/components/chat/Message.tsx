@@ -1,12 +1,14 @@
+import { User } from '../../types/User';
 import styles from './styles/Message.module.scss';
 
 interface MessageProps {
   authorName: string,
   text: string,
+  currentUser: User
 }
 
-export default function Message({ text, authorName }: MessageProps): JSX.Element {
-  if (authorName == 'Андрей Харитонов') {
+export default function Message({ text, authorName, currentUser }: MessageProps): JSX.Element {
+  if (authorName == currentUser.login) {
     return (
       <div className={styles.MyMessage}>
         <div className={styles.MyMessage__author}>
@@ -26,7 +28,7 @@ export default function Message({ text, authorName }: MessageProps): JSX.Element
             {authorName}
           </div>
         </div>
-        <div className={styles.message__text}>{text}</div>
+        <div>{text}</div>
       </div>
     );
   }

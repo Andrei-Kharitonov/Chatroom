@@ -10,7 +10,7 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get('/get-all')
-  getAll(): Promise<SecurityUser[] | null> {
+  getAll(): Promise<SecurityUser[] | []> {
     return this.userService.getAll()
   }
 

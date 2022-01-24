@@ -1,23 +1,21 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './styles/CreateMessage.module.scss';
+import { User } from '../../types/User';
 
-export default function CreateMessage(): JSX.Element {
+interface CreateMessageProps {
+  currentUser: User,
+  newMessageFunc: Function
+}
+
+export default function CreateMessage({ currentUser, newMessageFunc }: CreateMessageProps): JSX.Element {
   let [value, setValue] = useState('');
 
-  function formHandler(event: FormEvent<HTMLFormElement>) {
+  async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    axios.post('http://localhost:5000/message/create', {
-      text: value
-    })
-      .then(response => {
-        console.log(response.data);
-        setValue('');
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    await newMessageFunc(value, currentUser._id);
+    setValue('');
   }
 
   return (
@@ -31,9 +29,16 @@ export default function CreateMessage(): JSX.Element {
           placeholder="Написать сообщение..."
           type="text"
           value={value}
+          disabled={currentUser.banned}
           onChange={e => setValue(e.target.value)}
         />
-        <button className={styles.createMessage__send} type="submit">ОТПРАВИТЬ</button>
+        <button
+          className={styles.createMessage__send}
+          type="submit"
+          disabled={currentUser.banned}
+        >
+          ОТПРАВИТЬ
+        </button>
       </form>
     </div>
   );

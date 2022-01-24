@@ -12,21 +12,17 @@ import { User, UserDocument } from "./schemas/user.schemas";
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
-  async getAll(): Promise<SecurityUser[] | null> {
-    let allUsers = this.userModel.find().exec();
+  async getAll(): Promise<SecurityUser[] | any[]> {
+    let allUsers = await this.userModel.find().exec();
 
-    if (allUsers) {
-      return (await allUsers).map((user: User) => {
-        return {
-          _id: user._id,
-          login: user.login,
-          post: user.post,
-          banned: user.banned
-        }
-      });
-    } else {
-      return null;
-    }
+    return allUsers.map((user: User) => {
+      return {
+        _id: user._id,
+        login: user.login,
+        post: user.post,
+        banned: user.banned
+      }
+    });
   }
 
   async getByLogin(login: string, password: string): Promise<User | null> {
@@ -39,28 +35,37 @@ export class UserService {
     }
   }
 
+  async getOtherUsers(currentLogin: string): Promise<SecurityUser[] | null> {
+    let allUsers = await this.getAll();
+
+    if (allUsers.length) {
+      return allUsers.filter((user: SecurityUser) => user.login !== currentLogin);
+    } else {
+      return null;
+    }
+  }
+
   async create(userDto: CreateUserDto): Promise<User | null> {
     let newUser = new this.userModel(userDto);
     let users = await this.getAll();
+    newUser._id = uuidv4();
 
     if (!users.length) {
       newUser.post = Role.Admin;
-      newUser._id = uuidv4();
       return newUser.save();
-    } else if (sameLogin(users, newUser.login)) {
+    } else if (UserService.sameLogin(users, newUser.login)) {
       return null;
     } else {
       newUser.post = Role.User;
-      newUser._id = uuidv4();
       return newUser.save();
     }
   }
 
   async update(login: string, password: string, userDto: UpdateUserDto): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let otherUsers = (await this.getAll()).filter(user => user.login !== login);
+    let otherUsers = await this.getOtherUsers(login);
 
-    if (user && !sameLogin(otherUsers, userDto.login)) {
+    if (user && !UserService.sameLogin(otherUsers, userDto.login)) {
       return await this.userModel.findOneAndUpdate({ login }, userDto, { upsert: true, new: true });
     } else {
       return null;
@@ -79,7 +84,7 @@ export class UserService {
 
   async removeAccount(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let otherUsers = (await this.getAll()).filter(user => user.login !== login);
+    let otherUsers = await this.getOtherUsers(login);
 
     if (user && otherUsers.length && user.post == Role.Admin) {
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
@@ -91,16 +96,16 @@ export class UserService {
       return null
     }
   }
-}
 
-function sameLogin(users: SecurityUser[], login: string): boolean {
-  let result = false;
+  private static sameLogin(users: SecurityUser[], login: string): boolean {
+    let result = false;
 
-  users.map(user => {
-    if (user.login == login) {
-      result = true;
-    }
-  });
+    users.map(user => {
+      if (user.login == login) {
+        result = true;
+      }
+    });
 
-  return result;
+    return result;
+  }
 }

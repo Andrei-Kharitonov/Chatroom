@@ -30,6 +30,9 @@
     line-height: 0.7;
     border-radius: 100px;
     cursor: pointer;
+    &:disabled {
+      cursor: default;
+    }
     @media (max-width: 360px) {
       font-size: 14px;
     }

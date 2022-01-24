@@ -12,7 +12,7 @@ export default function Profile(): JSX.Element {
     login: '',
     password: '',
     post: 'none',
-    banned: false
+    banned: true
   });
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
