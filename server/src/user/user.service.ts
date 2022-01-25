@@ -16,12 +16,7 @@ export class UserService {
     let allUsers = await this.userModel.find().exec();
 
     return allUsers.map((user: User) => {
-      return {
-        _id: user._id,
-        login: user.login,
-        post: user.post,
-        banned: user.banned
-      }
+      return UserService.serializeUser(user);
     });
   }
 
@@ -66,7 +61,7 @@ export class UserService {
     let otherUsers = await this.getOtherUsers(login);
 
     if (user && !UserService.sameLogin(otherUsers, userDto.login)) {
-      return await this.userModel.findOneAndUpdate({ login }, userDto, { upsert: true, new: true });
+      return await this.userModel.findOneAndUpdate({ login }, userDto, { new: true });
     } else {
       return null;
     }
@@ -78,7 +73,7 @@ export class UserService {
     if (user && user.post == Role.Admin) {
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
-      return null
+      return null;
     }
   }
 
@@ -88,12 +83,54 @@ export class UserService {
 
     if (user && otherUsers.length && user.post == Role.Admin) {
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
-      await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { upsert: true, new: true });
+      await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { new: true });
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
-      return null
+      return null;
+    }
+  }
+
+  async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+    let bannedUser = await this.userModel.findById({ _id: id });
+
+    if (user && !user.banned && user._id != id && (user.post == Role.Admin || user.post == Role.Moderator && bannedUser.post == Role.User)) {
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { banned: !bannedUser.banned }, { new: true });
+      return UserService.serializeUser(updateUser);
+    } else {
+      return null;
+    }
+  }
+
+  async setModerator(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+
+    if (user && user._id != id && user.post == Role.Admin) {
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Moderator }, { new: true });
+      return UserService.serializeUser(updateUser);
+    } else {
+      return null;
+    }
+  }
+
+  async transferAdmin(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+
+    if (user && user.post == Role.Admin) {
+      await this.userModel.findByIdAndUpdate({ _id: user._id }, { post: Role.Moderator }, { new: true });
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Admin }, { new: true });
+      return UserService.serializeUser(updateUser);
+    }
+  }
+
+  private static serializeUser(user: User): SecurityUser {
+    return {
+      _id: user._id,
+      login: user.login,
+      post: user.post,
+      banned: user.banned
     }
   }
 

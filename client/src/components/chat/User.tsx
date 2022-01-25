@@ -55,6 +55,12 @@ export default function User({ id, name, post, currentUser, removeUser }: UserPr
             onMouseOut={() => setActive(false)}
           >
             <div className={styles.user__option}>
+              Выдать права модератора
+            </div>
+            <div className={styles.user__option}>
+              Передать права админа
+            </div>
+            <div className={styles.user__option}>
               Заблокировать
             </div>
             <div className={styles.user__option}>

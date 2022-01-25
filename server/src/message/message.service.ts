@@ -5,6 +5,7 @@ import { User, UserDocument } from "../user/schemas/user.schemas";
 import { v4 as uuidv4 } from 'uuid';
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { Message, MessageDocument } from "./schemas/message.schemas";
+import { Role } from "../user/roles/role.enum";
 
 @Injectable()
 export class MessageService {
@@ -25,6 +26,16 @@ export class MessageService {
       newMessage._id = uuidv4();
       newMessage.date = Date.now();
       return newMessage.save();
+    } else {
+      return null;
+    }
+  }
+
+  async remove(messageId: string, login: string, password: string): Promise<Message | null> {
+    let user = await this.userModel.findOne({ login });
+
+    if (user && user.password == password && (user.post == (Role.Admin || Role.Moderator) || (user.login == login && user.password == password))) {
+      return await this.messageModel.findByIdAndRemove({ _id: messageId });
     } else {
       return null;
     }

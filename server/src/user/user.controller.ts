@@ -29,6 +29,22 @@ export class UserController {
     return this.userService.update(user.login, user.password, updateUserDto);
   }
 
+  @Put('/ban/:id')
+  ban(@Param('id') id: string, @Query() user: Record<string, any>): Promise<SecurityUser | null> {
+    return this.userService.setBan(id, user.login, user.password);
+  }
+
+  @Put('/set-moderator/:id')
+  setModerator(@Param('id') id: string, @Query() user: Record<string, any>): Promise<SecurityUser | null> {
+    return this.userService.setModerator(id, user.login, user.password);
+  }
+
+
+  @Put('/transfer-admin/:id')
+  transferAdmin(@Param('id') id: string, @Query() user: Record<string, any>): Promise<SecurityUser | null> {
+    return this.userService.setModerator(id, user.login, user.password);
+  }
+
   @Delete('/delete/:id')
   removeUser(@Param('id') id: string, @Query() user: Record<string, any>): Promise<User | null> {
     return this.userService.removeUser(id, user.login, user.password);
