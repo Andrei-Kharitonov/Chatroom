@@ -6,6 +6,7 @@ build
 
 # next.js
 .next
+.babelrc
 
 # vscode
 .vscode

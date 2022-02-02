@@ -38,12 +38,17 @@
       display: block;
       position: absolute;
       right: 5px;
-      width: 160px;
+      width: 215px;
+      height: 100px;
+      overflow: auto;
       background: #fff;
       box-shadow: 2px 2px 2px #999;
       border: 1px solid #999;
       border-radius: 5px;
       z-index: 100;
+      &::-webkit-scrollbar {
+        width: 0;
+      }
     }
   }
   &__option {

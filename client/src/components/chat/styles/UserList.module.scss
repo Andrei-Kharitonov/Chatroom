@@ -25,13 +25,17 @@
     .userList__body {
       display: block;
       width: 100%;
-      padding-bottom: 30px;
+      padding-bottom: 95px;
       box-sizing: border-box;
     }
   }
   &__body {
-    overflow: auto;
+    width: 100%;
     height: 100%;
+    overflow: auto;
+    display: block;
+    padding-bottom: 95px;
+    box-sizing: border-box;
     @media (max-width: 730px) {
       display: none;
     }
