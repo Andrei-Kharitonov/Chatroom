@@ -8,13 +8,13 @@ interface AuthProps {
 }
 
 export default function Auth({ btnText, getUser }: AuthProps): JSX.Element {
-  let [name, setName] = useState('');
+  let [login, setLogin] = useState('');
   let [pwd, setPwd] = useState('');
 
   async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    let user = await getUser(name, pwd);
+    let user = await getUser(login, pwd);
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
       Router.push('/');
@@ -28,8 +28,8 @@ export default function Auth({ btnText, getUser }: AuthProps): JSX.Element {
           className={styles.input}
           type="text"
           placeholder="Введите имя (уникальное)"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={login}
+          onChange={e => setLogin(e.target.value)}
         />
         <input
           className={styles.input}
@@ -41,7 +41,7 @@ export default function Auth({ btnText, getUser }: AuthProps): JSX.Element {
         <button
           className="btn"
           type="submit"
-          disabled={name.length == 0 || pwd.length < 6}>
+          disabled={login.length == 0 || pwd.length < 6}>
           {btnText}
         </button>
       </form>

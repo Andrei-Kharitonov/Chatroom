@@ -26,7 +26,7 @@ export default function CreateMessage({ currentUser, newMessageFunc }: CreateMes
       >
         <input
           className={styles.createMessage__input}
-          placeholder="Написать сообщение..."
+          placeholder={currentUser.banned ? 'Вы были заблокированы!' : 'Написать сообщение...'}
           type="text"
           value={value}
           disabled={currentUser.banned}

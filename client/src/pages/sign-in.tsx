@@ -1,16 +1,21 @@
 import Link from 'next/link'
 import axios from 'axios';
-import styles from '../styles/authPage.module.scss';
+import styles from '../styles/AuthPage.module.scss';
 import Auth from "../components/auth/auth";
 import { User } from '../types/User';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 export default function SignIn(): JSX.Element {
+  let dispatch = useDispatch();
+
   async function getUser(name: string, pwd: string): Promise<User | void> {
     let response = await axios.get(`http://localhost:5000/user/get-by-login?login=${name}&password=${pwd}`);
 
     if (!response.data) {
       alert("Неверно указано имя пользователя или пароль")
     } else {
+      dispatch(setUser(response.data));
       return response.data;
     }
   }

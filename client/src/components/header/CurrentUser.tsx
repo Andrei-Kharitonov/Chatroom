@@ -1,32 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/dist/client/link';
+import { useDispatch, useSelector } from "react-redux";
+import { getUserFromLocalStorage } from '../../store/userSlice';
 import styles from './styles/CurrentUser.module.scss';
-import { User } from '../../types/User';
+import { RootState } from '../../store/store';
 
 export default function CurrentUser(): JSX.Element {
   let avatarImg: boolean = false;
-  let [url, setUrl] = useState('');
-  let [user, setUser] = useState({
-    login: 'Anonim',
-    post: 'none'
-  });
+  let dispatch = useDispatch();
+  let user = useSelector((state: RootState) => state.user.currentUser);
+  let isRegistred = useSelector((state: RootState) => state.user.isRegistred);
 
   useEffect(() => {
-    let localStorageData: User | null = JSON.parse(localStorage.getItem('user')!);
-
-    if (localStorageData) {
-      setUser(localStorageData);
-    } else {
-      setUser({
-        login: 'Anonim',
-        post: 'none'
-      });
-    }
-  }, [url]);
-
-  useEffect(() => {
-    setUrl(window.location.pathname);
-  });
+    dispatch(getUserFromLocalStorage());
+  }, []);
 
   return (
     <div className={styles.user}>
@@ -38,8 +25,8 @@ export default function CurrentUser(): JSX.Element {
       </div>
       <div className={styles.user__info}>
         <div className={styles.user__name}>
-          <Link href={user.post == 'none' ? "/sign-up" : "/profile"}>
-            <a>{user.login}</a>
+          <Link href={isRegistred ? "/profile" : "/sign-up"}>
+            <a style={{ color: user.banned ? '#ff2222' : 'inherit' }}>{user.login}</a>
           </Link>
         </div>
         <div className={styles.user__post}>

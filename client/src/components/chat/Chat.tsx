@@ -1,77 +1,45 @@
 import styles from './styles/Chat.module.scss';
-import UserList from './UserList';
-import CreateMessage from './CreateMessage';
 import Message from './Message';
-import { SecurityUser, User } from '../../types/User';
 import { Message as MessageI } from '../../types/Message';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 interface ChatProps {
-  users: SecurityUser[],
-  messages: MessageI[]
+  messages: MessageI[],
+  getName: Function,
+  removeMessage: Function
 }
 
-export default function Chat({ users, messages }: ChatProps): JSX.Element {
-  let [messageList, setMessageList] = useState(messages);
-  let [currentUser, setCurrentUser] = useState({
-    _id: '',
-    login: '',
-    password: '',
-    post: 'none',
-    banned: true
-  });
+export default function Chat({ messages, getName, removeMessage }: ChatProps): JSX.Element {
+  let currentUser = useSelector((state: RootState) => state.user.currentUser);
+  let isRegistred = useSelector((state: RootState) => state.user.isRegistred);
 
-  useEffect(() => {
-    let localStorageData: User | null = JSON.parse(localStorage.getItem('user')!);
-
-    if (localStorageData) {
-      setCurrentUser(localStorageData);
-    }
-  }, []);
-
-  async function addMessage(text: string, currentUserId: string): Promise<void> {
-    let newMessage = await axios.post('http://localhost:5000/message/create', {
-      text,
-      authorId: currentUserId
-    });
-
-    setMessageList([...messageList, newMessage.data]);
+  if (messages.length && isRegistred) {
+    return (
+      <ul className={styles.chat__body}>
+        {messages.map(message => {
+          return (
+            <li className={styles.list} key={message._id}>
+              <Message
+                text={message.text}
+                date={message.date}
+                id={message._id}
+                removeMessage={removeMessage}
+                authorName={getName(message.authorId)}
+                currentUser={currentUser}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    );
+  } else if (!isRegistred) {
+    return (
+      <h3 style={{ textAlign: 'center' }}>Войдите в аккаунт чтобы увидеть сообщения.</h3>
+    );
+  } else {
+    return (
+      <h3 style={{ textAlign: 'center' }}>Нет сообщений.</h3>
+    );
   }
-
-  function getAuthorName(authorId: string): string {
-    let name = '';
-
-    users.map(user => {
-      if (user._id == authorId) {
-        name = user.login;
-      }
-    });
-
-    return name;
-  }
-
-  return (
-    <div className="main-container">
-      <UserList users={users} />
-      <div className={styles.chat}>
-        {messageList.length
-          ? <ul className={styles.chat__body}>
-            {messageList.map(message => {
-              return (
-                <li className={styles.list} key={message._id}>
-                  <Message
-                    text={message.text}
-                    authorName={getAuthorName(message.authorId)}
-                    currentUser={currentUser}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-          : <h3 style={{ textAlign: 'center' }}>Нет сообщений.</h3>}
-        <CreateMessage currentUser={currentUser} newMessageFunc={addMessage} />
-      </div>
-    </div>
-  );
 }

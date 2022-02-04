@@ -39,10 +39,9 @@ export class UserController {
     return this.userService.setModerator(id, user.login, user.password);
   }
 
-
   @Put('/transfer-admin/:id')
   transferAdmin(@Param('id') id: string, @Query() user: Record<string, any>): Promise<SecurityUser | null> {
-    return this.userService.setModerator(id, user.login, user.password);
+    return this.userService.transferAdmin(id, user.login, user.password);
   }
 
   @Delete('/delete/:id')

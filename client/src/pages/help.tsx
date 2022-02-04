@@ -22,7 +22,7 @@ export default function Help(): JSX.Element {
         <h3 className={styles.section__title}>Роли пользователей</h3>
         <p className={styles.section__text}><span>User:&nbsp;</span>может читать и писать сообщения в чате, удалять свои сообщения.</p>
         <p className={styles.section__text}><span>Moderator:&nbsp;</span>может все тоже, что и user, плюс: удалять любые сообщения, блокировать пользователей (за исключением администратора и других модераторов).</p>
-        <p className={styles.section__text}><span>Admin:&nbsp;</span>может все тоже, что и moderator, плюс: выдавать права модератора, передать право администратора другому пользователю. Администратором может быть только один пользователь.</p>
+        <p className={styles.section__text}><span>Admin:&nbsp;</span>может все тоже, что и moderator, плюс: удалять пользователей, выдавать права модератора, передать право администратора другому пользователю. Администратором может быть только один пользователь.</p>
       </div>
     </div>
   );

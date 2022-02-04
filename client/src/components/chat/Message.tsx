@@ -1,20 +1,28 @@
+import { Role } from '../../types/Roles';
 import { User } from '../../types/User';
 import styles from './styles/Message.module.scss';
 
 interface MessageProps {
-  authorName: string,
   text: string,
+  date: Date,
+  id: string,
+  removeMessage: Function,
+  authorName: string,
   currentUser: User
 }
 
-export default function Message({ text, authorName, currentUser }: MessageProps): JSX.Element {
+export default function Message({ text, date, id, removeMessage, authorName, currentUser }: MessageProps): JSX.Element {
   if (authorName == currentUser.login) {
     return (
       <div className={styles.MyMessage}>
-        <div className={styles.MyMessage__author}>
-          Вы
+        <div className={styles.messageHeader}>
+          <div className={styles.deleteBtn} onClick={() => removeMessage(id)} data-title="Удалить">&#10006;</div>
+          <div className={styles.MyMessage__author}>
+            Вы
+          </div>
         </div>
-        <div className={styles.MyMessage__text}>{text}</div>
+        <p className={styles.text}>{text}</p>
+        <div className={styles.date}>{new Date(date).toLocaleTimeString() + ', ' + new Date(date).toLocaleDateString()}</div>
       </div>
     );
   } else {
@@ -24,11 +32,17 @@ export default function Message({ text, authorName, currentUser }: MessageProps)
           <div className={styles.message__authorAvatar}>
             <div></div>
           </div>
-          <div className={styles.message__authorName}>
-            {authorName}
+          <div className={styles.messageHeader}>
+            <div className={styles.message__authorName}>
+              {authorName}
+            </div>
+            {currentUser.post == Role.Admin || currentUser.post == Role.Moderator
+              ? <div className={styles.deleteBtn} onClick={() => removeMessage(id)} data-title="Удалить">&#10006;</div>
+              : ''}
           </div>
         </div>
-        <div>{text}</div>
+        <p className={styles.text}>{text}</p>
+        <div className={styles.date}>{new Date(date).toLocaleTimeString() + ', ' + new Date(date).toLocaleDateString()}</div>
       </div>
     );
   }

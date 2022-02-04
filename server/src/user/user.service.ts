@@ -67,6 +67,40 @@ export class UserService {
     }
   }
 
+  async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+    let bannedUser = await this.userModel.findById({ _id: id });
+
+    if (user && !user.banned && user._id != id && (user.post == Role.Admin || user.post == Role.Moderator && bannedUser.post == Role.User)) {
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { banned: !bannedUser.banned }, { new: true });
+      return UserService.serializeUser(updateUser);
+    } else {
+      return null;
+    }
+  }
+
+  async setModerator(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+    let updatePost = (await this.userModel.findById({ _id: id })).post == Role.Moderator ? Role.User : Role.Moderator;
+
+    if (user && user._id != id && user.post == Role.Admin) {
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: updatePost }, { new: true });
+      return UserService.serializeUser(updateUser);
+    } else {
+      return null;
+    }
+  }
+
+  async transferAdmin(id: string, login: string, password: string): Promise<SecurityUser | null> {
+    let user = await this.getByLogin(login, password);
+
+    if (user && user.post == Role.Admin) {
+      await this.userModel.findByIdAndUpdate({ _id: user._id }, { post: Role.Moderator }, { new: true });
+      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Admin, banned: false }, { new: true });
+      return UserService.serializeUser(updateUser);
+    }
+  }
+
   async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
 
@@ -89,39 +123,6 @@ export class UserService {
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null;
-    }
-  }
-
-  async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
-    let user = await this.getByLogin(login, password);
-    let bannedUser = await this.userModel.findById({ _id: id });
-
-    if (user && !user.banned && user._id != id && (user.post == Role.Admin || user.post == Role.Moderator && bannedUser.post == Role.User)) {
-      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { banned: !bannedUser.banned }, { new: true });
-      return UserService.serializeUser(updateUser);
-    } else {
-      return null;
-    }
-  }
-
-  async setModerator(id: string, login: string, password: string): Promise<SecurityUser | null> {
-    let user = await this.getByLogin(login, password);
-
-    if (user && user._id != id && user.post == Role.Admin) {
-      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Moderator }, { new: true });
-      return UserService.serializeUser(updateUser);
-    } else {
-      return null;
-    }
-  }
-
-  async transferAdmin(id: string, login: string, password: string): Promise<SecurityUser | null> {
-    let user = await this.getByLogin(login, password);
-
-    if (user && user.post == Role.Admin) {
-      await this.userModel.findByIdAndUpdate({ _id: user._id }, { post: Role.Moderator }, { new: true });
-      let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Admin }, { new: true });
-      return UserService.serializeUser(updateUser);
     }
   }
 

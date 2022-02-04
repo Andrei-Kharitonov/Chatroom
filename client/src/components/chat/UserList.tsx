@@ -5,44 +5,28 @@ import styles from './styles/UserList.module.scss';
 import User from './User';
 import { SecurityUser, User as UserI } from '../../types/User'
 import { Role } from '../../types/Roles';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/userSlice';
 
 
 interface UserListProps {
-  users: SecurityUser[]
+  users: SecurityUser[],
+  currentUser: UserI
 }
 
-export default function UserList({ users }: UserListProps): JSX.Element {
+export default function UserList({ users, currentUser }: UserListProps): JSX.Element {
   let [active, setActive] = useState(false);
   let [userList, setUserList] = useState(users);
-  let [currentUser, setCurrentUser] = useState({
-    _id: '1',
-    login: 'Anonim',
-    password: '000000',
-    post: 'none',
-    banned: false
-  });
-
-  useEffect(() => {
-    let localStorageData: UserI | null = JSON.parse(localStorage.getItem('user')!);
-
-    if (localStorageData) {
-      setCurrentUser(localStorageData);
-    }
-  }, []);
+  let dispatch = useDispatch();
 
   useEffect(() => {
     setActive(active);
   }, [active]);
 
   async function removeUser(id: string, currentUser: UserI): Promise<void> {
-    if (currentUser.post != Role.Admin) {
-      alert('У Вас недостаточно прав!');
-      return;
-    }
+    let query = confirm('Вы действительно хотите удалить этого пользователя?');
 
-    let queryDel = confirm('Вы действительно хотите удалить этого пользователя?');
-
-    if (queryDel) {
+    if (query) {
       let deleteUser = await axios.delete(`http://localhost:5000/user/delete/${id}?login=${currentUser.login}&password=${currentUser.password}`);
 
       if (deleteUser.data) {
@@ -50,6 +34,40 @@ export default function UserList({ users }: UserListProps): JSX.Element {
       } else {
         alert('ERROR!!!');
       }
+    }
+  }
+
+  async function setBan(id: string, currentUser: UserI): Promise<void> {
+    let BannedUser = await axios.put(`http://localhost:5000/user/ban/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+
+    if (BannedUser.data) {
+      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { banned: BannedUser.data.banned }) : user));
+    }
+  }
+
+  async function setModerator(id: string, currentUser: UserI): Promise<void> {
+    let NewModerator = await axios.put(`http://localhost:5000/user/set-moderator/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+
+    if (NewModerator.data) {
+      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { post: NewModerator.data.post }) : user));
+    }
+  }
+
+  async function setAdmin(id: string, currentUser: UserI): Promise<void> {
+    let newAdmin = await axios.put(`http://localhost:5000/user/transfer-admin/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+    let updateUser = await axios.get(`http://localhost:5000/user/get-by-login?login=${currentUser.login}&password=${currentUser.password}`);
+
+    if (newAdmin.data) {
+      dispatch(setUser(updateUser.data));
+      setUserList(userList.map(user => {
+        if (user._id == id) {
+          return Object.assign({}, user, { post: newAdmin.data.post, banned: false });
+        } else if (user._id == currentUser._id) {
+          return Object.assign({}, user, { post: Role.Moderator });
+        } else {
+          return user;
+        }
+      }));
     }
   }
 
@@ -64,7 +82,11 @@ export default function UserList({ users }: UserListProps): JSX.Element {
                   id={user._id}
                   name={user.login}
                   post={user.post}
+                  banned={user.banned}
                   currentUser={currentUser}
+                  setBan={setBan}
+                  setModerator={setModerator}
+                  setAdmin={setAdmin}
                   removeUser={removeUser}
                 />
               </li>

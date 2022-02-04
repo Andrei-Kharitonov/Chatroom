@@ -1,10 +1,14 @@
 import Link from 'next/link'
 import axios from 'axios';
-import styles from '../styles/authPage.module.scss';
+import styles from '../styles/AuthPage.module.scss';
 import Auth from '../components/auth/auth';
 import { User } from '../types/User';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 export default function SignUp(): JSX.Element {
+  let dispatch = useDispatch();
+
   async function createUser(name: string, pwd: string): Promise<User | void> {
     let response = await axios.post('http://localhost:5000/user/create', {
       login: name,
@@ -14,6 +18,7 @@ export default function SignUp(): JSX.Element {
     if (!response.data) {
       alert("Такое имя уже существует. Выберети другое.");
     } else {
+      dispatch(setUser(response.data));
       return response.data;
     }
   }

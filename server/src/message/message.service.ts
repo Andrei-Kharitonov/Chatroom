@@ -34,7 +34,8 @@ export class MessageService {
   async remove(messageId: string, login: string, password: string): Promise<Message | null> {
     let user = await this.userModel.findOne({ login });
 
-    if (user && user.password == password && (user.post == (Role.Admin || Role.Moderator) || (user.login == login && user.password == password))) {
+    // Удаляет сообщение если его удалил тот же кто его и написал или если это admin или moderator
+    if (user && user.password == password && ((user.post == Role.Admin || user.post == Role.Moderator) || (user.login == login))) {
       return await this.messageModel.findByIdAndRemove({ _id: messageId });
     } else {
       return null;
