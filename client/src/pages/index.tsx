@@ -1,13 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import Chat from '../components/chat/Chat';
-import CreateMessage from '../components/chat/CreateMessage';
 import UserList from '../components/chat/UserList';
-import { RootState } from '../store/store';
 import { Message } from '../types/Message';
 import { SecurityUser } from '../types/User';
-import styles from '../styles/Main.module.scss';
 
 interface MainPageProps {
   users: SecurityUser[],
@@ -15,32 +11,23 @@ interface MainPageProps {
 }
 
 function Main({ users, messages }: MainPageProps): JSX.Element {
-  let currentUser = useSelector((state: RootState) => state.user.currentUser);
+  let [userList, setUserList] = useState(users);
   let [messageList, setMessageList] = useState(messages);
 
-  async function addMessage(text: string, currentUserId: string): Promise<void> {
-    let newMessage = await axios.post('http://localhost:5000/message/create', {
-      text,
-      authorId: currentUserId
-    });
+  useEffect(() => {
+    let update = setInterval(async () => {
+      let updateUsers = await axios.get('http://localhost:5000/user/get-all');
+      let updateMessages = await axios.get('http://localhost:5000/message/get-all');
 
-    setMessageList([...messageList, newMessage.data]);
-  }
+      setUserList(updateUsers.data);
+      setMessageList(updateMessages.data);
+    }, 2000);
 
-  async function removeMessage(id: string): Promise<void> {
-    let queryDel = confirm('Вы действительно хотите удалить это сообщение?');
-
-    if (queryDel) {
-      let delMessage = await axios.delete(`http://localhost:5000/message/delete/${id}?login=${currentUser.login}&password=${currentUser.password}`);
-
-      if (delMessage.data) {
-        setMessageList(messageList.filter(message => message._id != id));
-      }
-    }
-  }
+    return () => clearInterval(update);
+  }, []);
 
   function getAuthorName(authorId: string): string {
-    let name = '';
+    let name = 'none';
 
     users.map(user => {
       if (user._id == authorId) {
@@ -53,11 +40,8 @@ function Main({ users, messages }: MainPageProps): JSX.Element {
 
   return (
     <div className="main-container">
-      <UserList users={users} currentUser={currentUser} />
-      <div className={styles.chat}>
-        <Chat messages={messageList} getName={getAuthorName} removeMessage={removeMessage} />
-        <CreateMessage currentUser={currentUser} newMessageFunc={addMessage} />
-      </div>
+      <UserList users={userList} />
+      <Chat messages={messageList} getName={getAuthorName} />
     </div>
   );
 }

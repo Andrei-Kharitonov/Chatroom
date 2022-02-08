@@ -19,8 +19,8 @@ const initialState: UserState = {
   isRegistred: false
 };
 
-export const userSlice = createSlice({
-  name: "user",
+export const currentUserSlice = createSlice({
+  name: "currentUser",
   initialState,
   reducers: {
     getUserFromLocalStorage: (state) => {
@@ -44,5 +44,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { getUserFromLocalStorage, setUser, setDefaultUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { getUserFromLocalStorage, setUser, setDefaultUser } = currentUserSlice.actions;
+export default currentUserSlice.reducer;

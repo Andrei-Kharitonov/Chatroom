@@ -1,4 +1,16 @@
 .chat {
+  width: 100%;
+  height: calc(100vh - 71px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  h3 a {
+    color: #0066ff;
+    text-decoration: underline;
+  }
+  @media (max-width: 730px) {
+    padding-left: 10px;
+  }
   &__body {
     overflow: auto;
     padding: 30px 10px;

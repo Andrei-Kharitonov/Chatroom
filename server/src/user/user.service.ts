@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { Message, MessageDocument } from "src/message/schemas/message.schemas";
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -10,7 +11,10 @@ import { User, UserDocument } from "./schemas/user.schemas";
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Message.name) private messageModel: Model<MessageDocument>
+  ) { }
 
   async getAll(): Promise<SecurityUser[] | any[]> {
     let allUsers = await this.userModel.find().exec();
@@ -105,6 +109,7 @@ export class UserService {
     let user = await this.getByLogin(login, password);
 
     if (user && user.post == Role.Admin) {
+      await this.messageModel.deleteMany({ authorId: id });
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null;
@@ -117,9 +122,11 @@ export class UserService {
 
     if (user && otherUsers.length && user.post == Role.Admin) {
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
+      await this.messageModel.deleteMany({ authorId: id });
       await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { new: true });
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
+      await this.messageModel.deleteMany({ authorId: id });
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null;

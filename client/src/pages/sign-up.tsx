@@ -4,7 +4,7 @@ import styles from '../styles/AuthPage.module.scss';
 import Auth from '../components/auth/auth';
 import { User } from '../types/User';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store/userSlice';
+import { setUser } from '../store/currentUserSlice';
 
 export default function SignUp(): JSX.Element {
   let dispatch = useDispatch();

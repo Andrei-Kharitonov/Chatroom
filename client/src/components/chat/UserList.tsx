@@ -5,19 +5,24 @@ import styles from './styles/UserList.module.scss';
 import User from './User';
 import { SecurityUser, User as UserI } from '../../types/User'
 import { Role } from '../../types/Roles';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../store/currentUserSlice';
+import { RootState } from '../../store/store';
 
 
 interface UserListProps {
   users: SecurityUser[],
-  currentUser: UserI
 }
 
-export default function UserList({ users, currentUser }: UserListProps): JSX.Element {
+export default function UserList({ users }: UserListProps): JSX.Element {
   let [active, setActive] = useState(false);
   let [userList, setUserList] = useState(users);
+  let currentUser = useSelector((state: RootState) => state.currentUser.currentUser);
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    setUserList(users);
+  }, [users]);
 
   useEffect(() => {
     setActive(active);
@@ -54,20 +59,24 @@ export default function UserList({ users, currentUser }: UserListProps): JSX.Ele
   }
 
   async function setAdmin(id: string, currentUser: UserI): Promise<void> {
-    let newAdmin = await axios.put(`http://localhost:5000/user/transfer-admin/${id}?login=${currentUser.login}&password=${currentUser.password}`);
-    let updateUser = await axios.get(`http://localhost:5000/user/get-by-login?login=${currentUser.login}&password=${currentUser.password}`);
+    let query = confirm('Вы действительно хотите удалить этого пользователя?');
 
-    if (newAdmin.data) {
-      dispatch(setUser(updateUser.data));
-      setUserList(userList.map(user => {
-        if (user._id == id) {
-          return Object.assign({}, user, { post: newAdmin.data.post, banned: false });
-        } else if (user._id == currentUser._id) {
-          return Object.assign({}, user, { post: Role.Moderator });
-        } else {
-          return user;
-        }
-      }));
+    if (query) {
+      let newAdmin = await axios.put(`http://localhost:5000/user/transfer-admin/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+      let updateUser = await axios.get(`http://localhost:5000/user/get-by-login?login=${currentUser.login}&password=${currentUser.password}`);
+
+      if (newAdmin.data) {
+        dispatch(setUser(updateUser.data));
+        setUserList(userList.map(user => {
+          if (user._id == id) {
+            return Object.assign({}, user, { post: newAdmin.data.post, banned: false });
+          } else if (user._id == currentUser._id) {
+            return Object.assign({}, user, { post: Role.Moderator });
+          } else {
+            return user;
+          }
+        }));
+      }
     }
   }
 

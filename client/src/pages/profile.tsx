@@ -5,13 +5,13 @@ import styles from '../styles/ProfilePage.module.scss';
 import { Role } from '../types/Roles';
 import { User } from '../types/User';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, setDefaultUser } from '../store/userSlice';
+import { setUser, setDefaultUser } from '../store/currentUserSlice';
 import { RootState } from '../store/store';
 
 export default function Profile(): JSX.Element {
   let dispatch = useDispatch();
-  let user = useSelector((state: RootState) => state.user.currentUser);
-  let isRegistred = useSelector((state: RootState) => state.user.isRegistred);
+  let user = useSelector((state: RootState) => state.currentUser.currentUser);
+  let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
 
@@ -99,7 +99,7 @@ export default function Profile(): JSX.Element {
       <button
         className={"btn " + styles.btnExit}
         onClick={() => exitAccount()}
-        disabled={!user._id.length}>
+        disabled={!isRegistred}>
         Выйти из аккаунта
       </button>
       <button

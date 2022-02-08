@@ -48,7 +48,7 @@ export default function User({ id, name, post, banned, currentUser, setBan, setM
           </div>
         </div>
       </div>
-      {(currentUser._id != id && (currentUser.post == Role.Admin || (currentUser.post == Role.Moderator && post == Role.User)))
+      {(currentUser._id != id && !currentUser.banned && (currentUser.post == Role.Admin || (currentUser.post == Role.Moderator && post == Role.User)))
         ? <div className={styles.user__options}>
           <div
             className={styles.user__optionsIcon}
