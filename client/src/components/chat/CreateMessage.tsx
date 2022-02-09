@@ -1,5 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
-import axios from 'axios';
+import { FormEvent, useState } from 'react';
 import styles from './styles/CreateMessage.module.scss';
 import { User } from '../../types/User';
 
@@ -10,11 +9,14 @@ interface CreateMessageProps {
 
 export default function CreateMessage({ currentUser, newMessageFunc }: CreateMessageProps): JSX.Element {
   let [value, setValue] = useState('');
+  let [disabled, setDisabled] = useState(false);
 
   async function formHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
+    setDisabled(true);
 
     await newMessageFunc(value, currentUser._id);
+    setDisabled(false);
     setValue('');
   }
 
@@ -29,13 +31,13 @@ export default function CreateMessage({ currentUser, newMessageFunc }: CreateMes
           placeholder={currentUser.banned ? 'Вы были заблокированы!' : 'Написать сообщение...'}
           type="text"
           value={value}
-          disabled={currentUser.banned}
+          disabled={currentUser.banned || disabled}
           onChange={e => setValue(e.target.value)}
         />
         <button
           className={styles.createMessage__send}
           type="submit"
-          disabled={currentUser.banned}
+          disabled={currentUser.banned || disabled}
         >
           ОТПРАВИТЬ
         </button>

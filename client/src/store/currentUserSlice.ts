@@ -11,7 +11,7 @@ let defaultUser: User = {
   login: 'Anonim',
   password: '000000',
   post: 'none',
-  banned: true
+  banned: false
 }
 
 const initialState: UserState = {

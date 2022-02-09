@@ -63,8 +63,9 @@ export class UserService {
   async update(login: string, password: string, userDto: UpdateUserDto): Promise<User | null> {
     let user = await this.getByLogin(login, password);
     let otherUsers = await this.getOtherUsers(login);
+    let sameLogin = UserService.sameLogin(otherUsers, userDto.login);
 
-    if (user && !UserService.sameLogin(otherUsers, userDto.login)) {
+    if (user && !sameLogin) {
       return await this.userModel.findOneAndUpdate({ login }, userDto, { new: true });
     } else {
       return null;
@@ -74,8 +75,9 @@ export class UserService {
   async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
     let user = await this.getByLogin(login, password);
     let bannedUser = await this.userModel.findById({ _id: id });
+    let isLowerInPost = user.post == Role.Admin || user.post == Role.Moderator && bannedUser.post == Role.User;
 
-    if (user && !user.banned && user._id != id && (user.post == Role.Admin || user.post == Role.Moderator && bannedUser.post == Role.User)) {
+    if (user && !user.banned && user._id != id && isLowerInPost) {
       let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { banned: !bannedUser.banned }, { new: true });
       return UserService.serializeUser(updateUser);
     } else {
@@ -100,6 +102,7 @@ export class UserService {
 
     if (user && user.post == Role.Admin) {
       await this.userModel.findByIdAndUpdate({ _id: user._id }, { post: Role.Moderator }, { new: true });
+
       let updateUser = await this.userModel.findByIdAndUpdate({ _id: id }, { post: Role.Admin, banned: false }, { new: true });
       return UserService.serializeUser(updateUser);
     }
@@ -110,6 +113,7 @@ export class UserService {
 
     if (user && user.post == Role.Admin) {
       await this.messageModel.deleteMany({ authorId: id });
+
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null;
@@ -122,18 +126,21 @@ export class UserService {
 
     if (user && otherUsers.length && user.post == Role.Admin) {
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
+
       await this.messageModel.deleteMany({ authorId: id });
       await this.userModel.findOneAndUpdate({ login: randomUser.login }, { post: Role.Admin }, { new: true });
+
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
       await this.messageModel.deleteMany({ authorId: id });
+
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else {
       return null;
     }
   }
 
-  private static serializeUser(user: User): SecurityUser {
+  public static serializeUser(user: User): SecurityUser {
     return {
       _id: user._id,
       login: user.login,
@@ -142,7 +149,7 @@ export class UserService {
     }
   }
 
-  private static sameLogin(users: SecurityUser[], login: string): boolean {
+  public static sameLogin(users: SecurityUser[], login: string): boolean {
     let result = false;
 
     users.map(user => {

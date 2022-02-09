@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Chat from '../components/chat/Chat';
 import UserList from '../components/chat/UserList';
+import { RootState } from '../store/store';
 import { Message } from '../types/Message';
 import { SecurityUser } from '../types/User';
 
@@ -13,23 +15,26 @@ interface MainPageProps {
 function Main({ users, messages }: MainPageProps): JSX.Element {
   let [userList, setUserList] = useState(users);
   let [messageList, setMessageList] = useState(messages);
+  let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
 
   useEffect(() => {
-    let update = setInterval(async () => {
-      let updateUsers = await axios.get('http://localhost:5000/user/get-all');
-      let updateMessages = await axios.get('http://localhost:5000/message/get-all');
+    if (isRegistred) {
+      let update = setInterval(async () => {
+        let updateUsers = await axios.get('http://localhost:5000/user/get-all');
+        let updateMessages = await axios.get('http://localhost:5000/message/get-all');
 
-      setUserList(updateUsers.data);
-      setMessageList(updateMessages.data);
-    }, 2000);
+        setUserList(updateUsers.data);
+        setMessageList(updateMessages.data);
+      }, 2000);
 
-    return () => clearInterval(update);
-  }, []);
+      return () => clearInterval(update);
+    }
+  }, [isRegistred]);
 
   function getAuthorName(authorId: string): string {
     let name = 'none';
 
-    users.map(user => {
+    userList.map(user => {
       if (user._id == authorId) {
         name = user.login;
       }

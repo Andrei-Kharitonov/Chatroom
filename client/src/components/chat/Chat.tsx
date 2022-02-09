@@ -23,12 +23,16 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
   }, [messages]);
 
   useEffect(() => {
+    scrollChat();
+  }, [messageList.length, isRegistred]);
+
+  function scrollChat(): void {
     let chat = document.querySelector('#chat');
 
     if (chat) {
       chat.scrollTop = chat.scrollHeight;
     }
-  }, [messageList.length]);
+  }
 
   async function addMessage(text: string, currentUserId: string): Promise<void> {
     let newMessage = await axios.post('http://localhost:5000/message/create', {
@@ -37,8 +41,7 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
     });
 
     setMessageList([...messageList, newMessage.data]);
-    let chat = document.querySelector('#chat');
-    chat!.scrollTop = chat!.scrollHeight;
+    scrollChat();
   }
 
   async function removeMessage(id: string): Promise<void> {

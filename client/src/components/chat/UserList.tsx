@@ -59,7 +59,7 @@ export default function UserList({ users }: UserListProps): JSX.Element {
   }
 
   async function setAdmin(id: string, currentUser: UserI): Promise<void> {
-    let query = confirm('Вы действительно хотите удалить этого пользователя?');
+    let query = confirm('Вы действительно хотите передать права администратора этому пользователю?');
 
     if (query) {
       let newAdmin = await axios.put(`http://localhost:5000/user/transfer-admin/${id}?login=${currentUser.login}&password=${currentUser.password}`);
