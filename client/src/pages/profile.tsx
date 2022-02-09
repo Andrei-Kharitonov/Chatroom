@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Router from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import styles from '../styles/ProfilePage.module.scss';
 import { Role } from '../types/Roles';
 import { User } from '../types/User';
@@ -14,6 +14,11 @@ export default function Profile(): JSX.Element {
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
+
+  useEffect(() => {
+    setNewName(user.login);
+    setNewPwd(user.password);
+  }, [isRegistred]);
 
   async function updateAccount(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
