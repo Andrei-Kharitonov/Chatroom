@@ -4,10 +4,10 @@ import { User } from '../../types/User';
 
 interface CreateMessageProps {
   currentUser: User,
-  newMessageFunc: Function
+  addMessage: (text: string, authorId: string) => Promise<void>
 }
 
-export default function CreateMessage({ currentUser, newMessageFunc }: CreateMessageProps): JSX.Element {
+export default function CreateMessage({ currentUser, addMessage }: CreateMessageProps): JSX.Element {
   let [value, setValue] = useState('');
   let [disabled, setDisabled] = useState(false);
 
@@ -15,7 +15,7 @@ export default function CreateMessage({ currentUser, newMessageFunc }: CreateMes
     event.preventDefault();
     setDisabled(true);
 
-    await newMessageFunc(value, currentUser._id);
+    await addMessage(value, currentUser._id);
     setDisabled(false);
     setValue('');
   }

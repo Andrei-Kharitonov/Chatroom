@@ -9,10 +9,10 @@ interface UserProps {
   post: string,
   banned: boolean,
   currentUser: UserI
-  setBan: Function,
-  setModerator: Function,
-  setAdmin: Function,
-  removeUser: Function
+  setBan: (id: string) => Promise<void>,
+  setModerator: (id: string) => Promise<void>,
+  setAdmin: (id: string) => Promise<void>,
+  removeUser: (id: string) => Promise<void>
 }
 
 export default function User({ id, name, post, banned, currentUser, setBan, setModerator, setAdmin, removeUser }: UserProps): JSX.Element {
@@ -70,18 +70,18 @@ export default function User({ id, name, post, banned, currentUser, setBan, setM
             onMouseOver={() => setActive(true)}
             onMouseOut={() => setActive(false)}
           >
-            <div className={styles.user__option} onClick={() => setBan(id, currentUser)}>
+            <div className={styles.user__option} onClick={() => setBan(id)}>
               {banned ? 'Разблокировать' : 'Заблокировать'}
             </div>
             {currentUser.post == Role.Admin
               ? <>
-                <div className={styles.user__option} onClick={() => setModerator(id, currentUser)}>
+                <div className={styles.user__option} onClick={() => setModerator(id)}>
                   {post == Role.Moderator ? 'Забрать права модератора' : 'Выдать права модератора'}
                 </div>
-                <div className={styles.user__option} onClick={() => setAdmin(id, currentUser)}>
+                <div className={styles.user__option} onClick={() => setAdmin(id)}>
                   Передать права админа
                 </div>
-                <div className={styles.user__option} onClick={() => removeUser(id, currentUser)}>
+                <div className={styles.user__option} onClick={() => removeUser(id)}>
                   Удалить
                 </div>
               </>

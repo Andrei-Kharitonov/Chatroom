@@ -4,28 +4,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserFromLocalStorage, setDefaultUser, setUser } from '../../store/currentUserSlice';
 import styles from './styles/CurrentUser.module.scss';
 import { RootState } from '../../store/store';
-import axios from 'axios';
-import { Role } from '../../types/Roles';
+import { UserAPI } from '../../api/userApi';
 
 export default function CurrentUser(): JSX.Element {
   let avatarImg: boolean = false;
-  let dispatch = useDispatch();
   let user = useSelector((state: RootState) => state.currentUser.currentUser);
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
+  let dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUserFromLocalStorage());
   }, []);
 
   useEffect(() => {
-    if (user.post != 'none') {
+    if (isRegistred) {
       let update = setInterval(async () => {
-        let updateUser = await axios.get(`http://localhost:5000/user/get-by-login?login=${user.login}&password=${user.password}`);
+        let refreshUser = await UserAPI.getByLogin(user.login, user.password);
 
-        if (!updateUser.data) {
-          dispatch(setDefaultUser());
+        if (refreshUser) {
+          dispatch(setUser(refreshUser));
         } else {
-          dispatch(setUser(updateUser.data));
+          dispatch(setDefaultUser());
+          clearInterval(update);
         }
       }, 2000);
 

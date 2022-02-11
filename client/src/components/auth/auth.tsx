@@ -1,10 +1,11 @@
 import { FormEvent, useState } from 'react';
 import Router from 'next/router'
 import styles from './styles/auth.module.scss';
+import { User } from '../../types/User';
 
 interface AuthProps {
   btnText: string,
-  getUser: Function
+  getUser: (login: string, password: string) => Promise<User | void>
 }
 
 export default function Auth({ btnText, getUser }: AuthProps): JSX.Element {

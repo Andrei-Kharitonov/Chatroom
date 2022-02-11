@@ -5,12 +5,12 @@ import { Message as MessageI } from '../../types/Message';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import CreateMessage from './CreateMessage';
-import axios from 'axios';
 import Link from 'next/link';
+import { MessageAPI } from '../../api/messageApi';
 
 interface ChatProps {
   messages: MessageI[],
-  getName: Function
+  getName: (authorId: string) => string
 }
 
 export default function Chat({ messages, getName }: ChatProps): JSX.Element {
@@ -35,12 +35,9 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
   }
 
   async function addMessage(text: string, currentUserId: string): Promise<void> {
-    let newMessage = await axios.post('http://localhost:5000/message/create', {
-      text,
-      authorId: currentUserId
-    });
+    let newMessage = await MessageAPI.create(text, currentUserId);
 
-    setMessageList([...messageList, newMessage.data]);
+    setMessageList([...messageList, newMessage]);
     scrollChat();
   }
 
@@ -48,9 +45,9 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
     let queryDel = confirm('Вы действительно хотите удалить это сообщение?');
 
     if (queryDel) {
-      let delMessage = await axios.delete(`http://localhost:5000/message/delete/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+      let delMessage = await MessageAPI.delete(id, currentUser.login, currentUser.password);
 
-      if (delMessage.data) {
+      if (delMessage) {
         setMessageList(messageList.filter(message => message._id != id));
       }
     }
@@ -75,7 +72,7 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
             );
           })}
         </ul>
-        <CreateMessage currentUser={currentUser} newMessageFunc={addMessage} />
+        <CreateMessage currentUser={currentUser} addMessage={addMessage} />
       </div>
     );
   } else if (!isRegistred) {
@@ -93,7 +90,7 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
     return (
       <div className={styles.chat}>
         <h3 style={{ textAlign: 'center' }}>Нет сообщений.</h3>
-        <CreateMessage currentUser={currentUser} newMessageFunc={addMessage} />
+        <CreateMessage currentUser={currentUser} addMessage={addMessage} />
       </div>
     );
   }

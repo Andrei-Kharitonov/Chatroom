@@ -6,7 +6,7 @@ interface MessageProps {
   text: string,
   date: Date,
   id: string,
-  removeMessage: Function,
+  removeMessage: (id: string) => Promise<void>,
   authorName: string,
   currentUser: User
 }

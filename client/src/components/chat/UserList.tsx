@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import styles from './styles/UserList.module.scss';
 import User from './User';
-import { SecurityUser, User as UserI } from '../../types/User'
+import { SecurityUser } from '../../types/User'
 import { Role } from '../../types/Roles';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/currentUserSlice';
 import { RootState } from '../../store/store';
+import { UserAPI } from '../../api/userApi';
 
 
 interface UserListProps {
@@ -28,48 +28,48 @@ export default function UserList({ users }: UserListProps): JSX.Element {
     setActive(active);
   }, [active]);
 
-  async function removeUser(id: string, currentUser: UserI): Promise<void> {
+  async function removeUser(id: string): Promise<void> {
     let query = confirm('Вы действительно хотите удалить этого пользователя?');
 
     if (query) {
-      let deleteUser = await axios.delete(`http://localhost:5000/user/delete/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+      let deleteUser = await UserAPI.delete(id, currentUser.login, currentUser.password);
 
-      if (deleteUser.data) {
-        setUserList(userList => userList.filter(user => user._id !== deleteUser.data._id));
+      if (deleteUser) {
+        setUserList(userList => userList.filter(user => user._id !== deleteUser!._id));
       } else {
         alert('ERROR!!!');
       }
     }
   }
 
-  async function setBan(id: string, currentUser: UserI): Promise<void> {
-    let BannedUser = await axios.put(`http://localhost:5000/user/ban/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+  async function setBan(id: string): Promise<void> {
+    let BannedUser = await UserAPI.setBan(id, currentUser.login, currentUser.password);
 
-    if (BannedUser.data) {
-      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { banned: BannedUser.data.banned }) : user));
+    if (BannedUser) {
+      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { banned: BannedUser!.banned }) : user));
     }
   }
 
-  async function setModerator(id: string, currentUser: UserI): Promise<void> {
-    let NewModerator = await axios.put(`http://localhost:5000/user/set-moderator/${id}?login=${currentUser.login}&password=${currentUser.password}`);
+  async function setModerator(id: string): Promise<void> {
+    let NewModerator = await UserAPI.giveModerator(id, currentUser.login, currentUser.password);
 
-    if (NewModerator.data) {
-      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { post: NewModerator.data.post }) : user));
+    if (NewModerator) {
+      setUserList(userList.map(user => user._id == id ? Object.assign({}, user, { post: NewModerator!.post }) : user));
     }
   }
 
-  async function setAdmin(id: string, currentUser: UserI): Promise<void> {
+  async function setAdmin(id: string): Promise<void> {
     let query = confirm('Вы действительно хотите передать права администратора этому пользователю?');
 
     if (query) {
-      let newAdmin = await axios.put(`http://localhost:5000/user/transfer-admin/${id}?login=${currentUser.login}&password=${currentUser.password}`);
-      let updateUser = await axios.get(`http://localhost:5000/user/get-by-login?login=${currentUser.login}&password=${currentUser.password}`);
+      let newAdmin = await UserAPI.transferAdmin(id, currentUser.login, currentUser.password);
+      let updatedUser = await UserAPI.getByLogin(currentUser.login, currentUser.password);
 
-      if (newAdmin.data) {
-        dispatch(setUser(updateUser.data));
+      if (newAdmin) {
+        dispatch(setUser(updatedUser));
         setUserList(userList.map(user => {
           if (user._id == id) {
-            return Object.assign({}, user, { post: newAdmin.data.post, banned: false });
+            return Object.assign({}, user, { post: newAdmin!.post, banned: false });
           } else if (user._id == currentUser._id) {
             return Object.assign({}, user, { post: Role.Moderator });
           } else {

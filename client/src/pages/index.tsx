@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Chat from '../components/chat/Chat';
@@ -6,6 +5,8 @@ import UserList from '../components/chat/UserList';
 import { RootState } from '../store/store';
 import { Message } from '../types/Message';
 import { SecurityUser } from '../types/User';
+import { UserAPI } from '../api/userApi'
+import { MessageAPI } from '../api/messageApi';
 
 interface MainPageProps {
   users: SecurityUser[],
@@ -20,11 +21,15 @@ function Main({ users, messages }: MainPageProps): JSX.Element {
   useEffect(() => {
     if (isRegistred) {
       let update = setInterval(async () => {
-        let updateUsers = await axios.get('http://localhost:5000/user/get-all');
-        let updateMessages = await axios.get('http://localhost:5000/message/get-all');
+        let updatedUsers = await UserAPI.getAll();
+        let updatedMessages = await MessageAPI.getAll();
 
-        setUserList(updateUsers.data);
-        setMessageList(updateMessages.data);
+        if (updatedUsers && updatedMessages) {
+          setUserList(updatedUsers);
+          setMessageList(updatedMessages);
+        } else {
+          alert('NETWORK ERROR!');
+        }
       }, 2000);
 
       return () => clearInterval(update);
@@ -52,10 +57,8 @@ function Main({ users, messages }: MainPageProps): JSX.Element {
 }
 
 export async function getServerSideProps() {
-  let resUsers = await axios.get('http://localhost:5000/user/get-all');
-  let resMessages = await axios.get('http://localhost:5000/message/get-all');
-  let users: SecurityUser[] = resUsers.data;
-  let messages: Message[] = resMessages.data;
+  let users = await UserAPI.getAll();
+  let messages = await MessageAPI.getAll();
 
   return {
     props: { users, messages }

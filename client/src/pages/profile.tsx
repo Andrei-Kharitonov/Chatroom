@@ -1,12 +1,13 @@
 import axios from 'axios';
 import Router from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import styles from '../styles/ProfilePage.module.scss';
 import { Role } from '../types/Roles';
 import { User } from '../types/User';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setDefaultUser } from '../store/currentUserSlice';
 import { RootState } from '../store/store';
+import { UserAPI } from '../api/userApi';
 
 export default function Profile(): JSX.Element {
   let dispatch = useDispatch();
@@ -14,11 +15,33 @@ export default function Profile(): JSX.Element {
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
+  let [avatarUrl, setAvatarUrl] = useState<string>();
 
   useEffect(() => {
     setNewName(user.login);
     setNewPwd(user.password);
   }, [isRegistred]);
+
+  async function changeAvatar(e: ChangeEvent<HTMLInputElement>): Promise<void> {
+    let file = e.target.files ? e.target.files[0] : null;
+
+    if (file) {
+      let formData = new FormData();
+      let reader = new FileReader();
+
+      formData.append("file", file);
+
+      reader.onloadend = () => {
+        setAvatarUrl(reader.result as string);
+      }
+      reader.readAsDataURL(file);
+
+      let res = await axios.post('http://localhost:5000/user/upload-avatar', formData);
+
+      console.log(file);
+      console.log(res.data);
+    }
+  }
 
   async function updateAccount(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -27,13 +50,14 @@ export default function Profile(): JSX.Element {
       return;
     }
 
-    let newUser = await axios.put(`http://localhost:5000/user/update?login=${user.login}&password=${user.password}`, {
+    let updateData = {
       login: newName,
       password: newPwd
-    });
+    }
+    let updatedUser = await UserAPI.update(user.login, user.password, updateData);
 
-    if (newUser.data) {
-      dispatch(setUser(newUser.data));
+    if (updatedUser) {
+      dispatch(setUser(updatedUser));
       Router.push('/');
     } else {
       alert("Такое имя уже занято! Попробуйте другое.")
@@ -52,9 +76,9 @@ export default function Profile(): JSX.Element {
     `);
 
     if (queryDel) {
-      let deleteUser = await axios.delete(`http://localhost:5000/user/delete-account?id=${user._id}&login=${user.login}&password=${user.password}`);
+      let deleteUser = await UserAPI.deleteAccount(user._id, user.login, user.password);
 
-      if (deleteUser.data) {
+      if (deleteUser) {
         dispatch(setDefaultUser());
         Router.push('/sign-up');
       } else {
@@ -68,12 +92,13 @@ export default function Profile(): JSX.Element {
       <h2 className="title">Ваш профиль</h2>
       <form className={styles.body} onSubmit={updateAccount}>
         <div className={styles.userAvatar}>
-          <div className={styles.avatarImg}></div>
+          <div className={styles.avatar}>
+            {avatarUrl ? <img className={styles.avatar__img} src={avatarUrl} /> : ''}
+          </div>
           <div className={styles.inputImg}>
-            <input type="file" disabled={!isRegistred} />
+            <input type="file" accept="image/*" disabled={!isRegistred} onChange={changeAvatar} />
             <label className="btn">Выбрать фото</label>
           </div>
-
         </div>
         <div className={styles.userInfo}>
           <input
@@ -97,7 +122,7 @@ export default function Profile(): JSX.Element {
         <button
           className="btn"
           type="submit"
-          disabled={!isRegistred || (user.login === newName || !newName.length) && user.password == newPwd || newPwd.length < 6}>
+          disabled={!isRegistred || !avatarUrl?.length && (user.login == newName || !newName.length) && user.password == newPwd || newPwd.length < 6}>
           Сохранить изменения
         </button>
       </form>
