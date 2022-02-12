@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MessageModule } from './message/message.module';
 import { UserModule } from './user/user.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -11,6 +12,9 @@ import { UserModule } from './user/user.module';
     }),
     MongooseModule.forRoot('mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/messages?retryWrites=true&w=majority', {
       connectionName: 'messages'
+    }),
+    MulterModule.register({
+      dest: './files',
     }),
     UserModule,
     MessageModule

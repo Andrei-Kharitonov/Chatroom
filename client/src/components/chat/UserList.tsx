@@ -91,8 +91,8 @@ export default function UserList({ users }: UserListProps): JSX.Element {
                   id={user._id}
                   name={user.login}
                   post={user.post}
+                  avatarPath={user.avatarPath}
                   banned={user.banned}
-                  currentUser={currentUser}
                   setBan={setBan}
                   setModerator={setModerator}
                   setAdmin={setAdmin}

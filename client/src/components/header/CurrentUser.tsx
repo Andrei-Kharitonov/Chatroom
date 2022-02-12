@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/dist/client/link';
 import { useDispatch, useSelector } from "react-redux";
 import { getUserFromLocalStorage, setDefaultUser, setUser } from '../../store/currentUserSlice';
@@ -7,7 +7,7 @@ import { RootState } from '../../store/store';
 import { UserAPI } from '../../api/userApi';
 
 export default function CurrentUser(): JSX.Element {
-  let avatarImg: boolean = false;
+  let [avatarUrl, setAvatarUrl] = useState<string>();
   let user = useSelector((state: RootState) => state.currentUser.currentUser);
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let dispatch = useDispatch();
@@ -15,6 +15,10 @@ export default function CurrentUser(): JSX.Element {
   useEffect(() => {
     dispatch(getUserFromLocalStorage());
   }, []);
+
+  useEffect(() => {
+    setAvatarUrl(UserAPI.getAvatarPaht(user.avatarPath) ?? '');
+  }, [user]);
 
   useEffect(() => {
     if (isRegistred) {
@@ -35,11 +39,8 @@ export default function CurrentUser(): JSX.Element {
 
   return (
     <div className={styles.user}>
-      <div
-        className={styles.user__avatar}
-        style={{ background: avatarImg ? '' : '#c4c4c4' }}
-      >
-        {avatarImg ? <img src="#" alt="avatar" /> : ''}
+      <div className={styles.user__avatar}>
+        {avatarUrl?.length ? <img className={styles.user__avatar__img} src={avatarUrl} /> : ''}
       </div>
       <div className={styles.user__info}>
         <div className={styles.user__name}>

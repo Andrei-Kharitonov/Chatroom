@@ -8,6 +8,9 @@ export class SecurityUser {
   @Prop({ unique: true })
   login: string;
 
+  @Prop({ default: '' })
+  avatarPath: string;
+
   @Prop({ default: 'user' })
   post: string;
 

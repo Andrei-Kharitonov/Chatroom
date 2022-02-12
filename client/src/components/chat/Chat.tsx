@@ -10,10 +10,10 @@ import { MessageAPI } from '../../api/messageApi';
 
 interface ChatProps {
   messages: MessageI[],
-  getName: (authorId: string) => string
+  getAuthoData: (authorId: string) => { name: string, avatarUrl: string }
 }
 
-export default function Chat({ messages, getName }: ChatProps): JSX.Element {
+export default function Chat({ messages, getAuthoData }: ChatProps): JSX.Element {
   let [messageList, setMessageList] = useState(messages);
   let currentUser = useSelector((state: RootState) => state.currentUser.currentUser);
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
@@ -65,7 +65,8 @@ export default function Chat({ messages, getName }: ChatProps): JSX.Element {
                   date={message.date}
                   id={message._id}
                   removeMessage={removeMessage}
-                  authorName={getName(message.authorId)}
+                  authorName={getAuthoData(message.authorId).name}
+                  avatarUrl={getAuthoData(message.authorId).avatarUrl}
                   currentUser={currentUser}
                 />
               </li>

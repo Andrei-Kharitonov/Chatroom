@@ -36,22 +36,26 @@ function Main({ users, messages }: MainPageProps): JSX.Element {
     }
   }, [isRegistred]);
 
-  function getAuthorName(authorId: string): string {
-    let name = 'none';
+  function getAuthoData(authorId: string): { name: string, avatarUrl: string } {
+    let userData = {
+      name: 'none',
+      avatarUrl: ''
+    }
 
     userList.map(user => {
       if (user._id == authorId) {
-        name = user.login;
+        userData.name = user.login;
+        userData.avatarUrl = user.avatarPath;
       }
     });
 
-    return name;
+    return userData;
   }
 
   return (
     <div className="main-container">
       <UserList users={userList} />
-      <Chat messages={messageList} getName={getAuthorName} />
+      <Chat messages={messageList} getAuthoData={getAuthoData} />
     </div>
   );
 }

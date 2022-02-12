@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Put, Post, Query, Delete, Param, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Body, Controller, Get, Put, Post, Query, Delete, Param, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schemas';
 import { SecurityUser } from './schemas/security-user.schemas';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from 'src/utils/file-uploading.utils';
 
 @Controller('user')
 export class UserController {
@@ -20,15 +22,30 @@ export class UserController {
     return this.userService.getByLogin(user.login, user.password);
   }
 
+  @Get('/avatar/:imgpath')
+  seeUploadedFile(@Param('imgpath') image, @Res() res) {
+    return res.sendFile(image, { root: './files' });
+  }
+
   @Post('/create')
   createUser(@Body() createUserDto: CreateUserDto): Promise<User | null> {
     return this.userService.create(createUserDto);
   }
 
-  @Post('upload-avatar')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File): Express.Multer.File {
-    return file;
+  @Post('/upload-avatar')
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './files',
+      filename: editFileName,
+    }),
+    fileFilter: imageFileFilter,
+  }))
+  uploadAvatar(@Query() user: Record<string, any>, @UploadedFile() file: Express.Multer.File): Promise<User | null> {
+    let response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    return this.userService.uploadAvatar(user.login, user.password, user.lastAvatarPath, response.filename);
   }
 
   @Put('/update')

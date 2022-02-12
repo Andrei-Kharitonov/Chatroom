@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { UserAPI } from '../../api/userApi';
+import { RootState } from '../../store/store';
 import { Role } from '../../types/Roles';
-import { User as UserI } from '../../types/User';
 import styles from './styles/User.module.scss';
 
 interface UserProps {
   id: string,
   name: string,
+  avatarPath: string,
   post: string,
   banned: boolean,
-  currentUser: UserI
   setBan: (id: string) => Promise<void>,
   setModerator: (id: string) => Promise<void>,
   setAdmin: (id: string) => Promise<void>,
   removeUser: (id: string) => Promise<void>
 }
 
-export default function User({ id, name, post, banned, currentUser, setBan, setModerator, setAdmin, removeUser }: UserProps): JSX.Element {
+export default function User({ id, name, avatarPath, post, banned, setBan, setModerator, setAdmin, removeUser }: UserProps): JSX.Element {
   let [active, setActive] = useState(false);
   let [colorName, setColorName] = useState('inherit');
-  let avatarImg = false;
+  let [avatarUrl, setAvatarUrl] = useState('');
+  let currentUser = useSelector((state: RootState) => state.currentUser.currentUser);
 
   useEffect(() => {
     if (banned) {
@@ -30,14 +33,15 @@ export default function User({ id, name, post, banned, currentUser, setBan, setM
     }
   });
 
+  useEffect(() => {
+    setAvatarUrl(UserAPI.getAvatarPaht(avatarPath) ?? '');
+  }, []);
+
   return (
     <div className={styles.user}>
       <div className={styles.user__body}>
-        <div
-          className={styles.user__avatar}
-          style={{ background: avatarImg ? '' : '#c4c4c4' }}
-        >
-          {avatarImg ? <img src="#" alt="avatar" /> : ''}
+        <div className={styles.user__avatar}>
+          {avatarUrl.length ? <img className={styles.user__avatar__img} src={avatarUrl} /> : ''}
         </div>
         <div className={styles.user__info}>
           <div className={styles.user__name} style={{ color: colorName }}>

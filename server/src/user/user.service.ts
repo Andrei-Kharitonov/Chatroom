@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Message, MessageDocument } from "src/message/schemas/message.schemas";
 import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { Role } from "./roles/role.enum";
@@ -72,6 +73,20 @@ export class UserService {
     }
   }
 
+  async uploadAvatar(login: string, password: string, lastAvatarPath: string, avatarPath: string): Promise<User | null> {
+    let user = await this.getByLogin(login, password);
+    let removeAvatarPath = `files/${lastAvatarPath}`;
+
+    if (user) {
+      if (lastAvatarPath.length) {
+        fs.unlinkSync(removeAvatarPath);
+      }
+      return await this.userModel.findOneAndUpdate({ login }, { avatarPath }, { new: true });
+    } else {
+      return null;
+    }
+  }
+
   async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
     let user = await this.getByLogin(login, password);
     let bannedUser = await this.userModel.findById({ _id: id });
@@ -110,8 +125,13 @@ export class UserService {
 
   async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
+    let removeAvatarPath = `files/${(await this.userModel.findById({ _id: id })).avatarPath}`;
 
     if (user && user.post == Role.Admin) {
+      if (user.avatarPath.length) {
+        fs.unlinkSync(removeAvatarPath);
+      }
+
       await this.messageModel.deleteMany({ authorId: id });
 
       return await this.userModel.findByIdAndRemove({ _id: id });
@@ -123,8 +143,13 @@ export class UserService {
   async removeAccount(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
     let otherUsers = await this.getOtherUsers(login);
+    let removeAvatarPath = `files/${user.avatarPath}`;
 
     if (user && otherUsers.length && user.post == Role.Admin) {
+      if (user.avatarPath.length) {
+        fs.unlinkSync(removeAvatarPath);
+      }
+
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
 
       await this.messageModel.deleteMany({ authorId: id });
@@ -132,6 +157,10 @@ export class UserService {
 
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
+      if (user.avatarPath.length) {
+        fs.unlinkSync(removeAvatarPath);
+      }
+
       await this.messageModel.deleteMany({ authorId: id });
 
       return await this.userModel.findByIdAndRemove({ _id: id });
@@ -144,6 +173,7 @@ export class UserService {
     return {
       _id: user._id,
       login: user.login,
+      avatarPath: user.avatarPath,
       post: user.post,
       banned: user.banned
     }

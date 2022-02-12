@@ -14,6 +14,9 @@ export class User {
   @Prop()
   password: string;
 
+  @Prop({ default: '' })
+  avatarPath: string;
+
   @Prop({ default: 'user' })
   post: string;
 

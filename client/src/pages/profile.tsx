@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Router from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import styles from '../styles/ProfilePage.module.scss';
@@ -15,11 +14,14 @@ export default function Profile(): JSX.Element {
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
+  let [avatar, setAvatar] = useState<FormData>();
+  let [isNewAvatar, setIsNewAvatar] = useState(false);
   let [avatarUrl, setAvatarUrl] = useState<string>();
 
   useEffect(() => {
     setNewName(user.login);
     setNewPwd(user.password);
+    setAvatarUrl(UserAPI.getAvatarPaht(user.avatarPath) ?? '');
   }, [isRegistred]);
 
   async function changeAvatar(e: ChangeEvent<HTMLInputElement>): Promise<void> {
@@ -29,17 +31,13 @@ export default function Profile(): JSX.Element {
       let formData = new FormData();
       let reader = new FileReader();
 
-      formData.append("file", file);
+      formData.append("image", file);
 
-      reader.onloadend = () => {
-        setAvatarUrl(reader.result as string);
-      }
+      reader.onloadend = () => setAvatarUrl(reader.result as string);
       reader.readAsDataURL(file);
 
-      let res = await axios.post('http://localhost:5000/user/upload-avatar', formData);
-
-      console.log(file);
-      console.log(res.data);
+      setAvatar(formData);
+      setIsNewAvatar(true);
     }
   }
 
@@ -53,6 +51,11 @@ export default function Profile(): JSX.Element {
     let updateData = {
       login: newName,
       password: newPwd
+    }
+
+    if (avatar && avatarUrl != user.avatarPath) {
+      await UserAPI.uploadAvatar(user.login, user.password, user.avatarPath, avatar);
+      setIsNewAvatar(false);
     }
     let updatedUser = await UserAPI.update(user.login, user.password, updateData);
 
@@ -122,7 +125,7 @@ export default function Profile(): JSX.Element {
         <button
           className="btn"
           type="submit"
-          disabled={!isRegistred || !avatarUrl?.length && (user.login == newName || !newName.length) && user.password == newPwd || newPwd.length < 6}>
+          disabled={!isRegistred || !isNewAvatar && (user.login == newName || !newName.length) && user.password == newPwd || newPwd.length < 6}>
           Сохранить изменения
         </button>
       </form>

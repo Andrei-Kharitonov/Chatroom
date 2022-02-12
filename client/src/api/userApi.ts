@@ -16,6 +16,14 @@ export class UserAPI {
     return (await axios.get(`${serverUrl}/user/get-by-login?login=${login}&password=${password}`)).data;
   }
 
+  static getAvatarPaht(avatarPath: string | undefined): string | null {
+    if (avatarPath && avatarPath.length) {
+      return `${serverUrl}/user/avatar/${avatarPath}`;
+    } else {
+      return null;
+    }
+  }
+
   static async create(login: string, password: string): Promise<User | null> {
     return (await axios.post(`${serverUrl}/user/create`, {
       login, password
@@ -27,6 +35,11 @@ export class UserAPI {
       login: updatedUser.login,
       password: updatedUser.password
     })).data;
+  }
+
+  static async uploadAvatar(login: string, password: string, lastAvatarPath: string, avatar: FormData): Promise<User | null> {
+    let removedAvatarPath = lastAvatarPath.length ? lastAvatarPath : '';
+    return (await axios.post(`${serverUrl}/user/upload-avatar?login=${login}&password=${password}&lastAvatarPath=${removedAvatarPath}`, avatar)).data;
   }
 
   static async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
