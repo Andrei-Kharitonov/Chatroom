@@ -12,8 +12,8 @@
   &__avatar {
     border-radius: 50%;
     overflow: hidden;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     background: #c4c4c4;
     &__img {
       width: 100%;
@@ -45,7 +45,6 @@
       position: absolute;
       right: 5px;
       width: 215px;
-      // max-height: 100px;
       overflow: auto;
       background: #fff;
       box-shadow: 2px 2px 2px #999;
