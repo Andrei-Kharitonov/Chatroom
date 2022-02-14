@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "npm run build:next && npm run start:dev",
     "prebuild": "rimraf dist",
-    "build": "yarn build:next && yarn build:nest",
+    "build": "npm run build:next && npm run build:nest",
     "build:next": "next build",
     "build:nest": "nest build --path ./tsconfig.server.json",
     "next:dev": "next dev",
