@@ -17,6 +17,7 @@
     "start:next": "next dev",
     "start:dev": "SET NODE_ENV=development && nest start --path ./tsconfig.server.json --watch",
     "start:debug": "nest start --path ./tsconfig.server.json --debug --watch",
+    "prestart:prod": "rimraf dist && npm run build",
     "postinstall": "npm run prestart:prod",
     "start:prod": "SET NODE_ENV=production && node dist/server/main"
   },
