@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from '../client/styles/AuthPage.module.scss';
+import styles from '../client/styles/authPage.module.scss';
 import Auth from "../client/components/auth/auth";
 import { User } from '../client/types/User';
 import { useDispatch } from 'react-redux';
