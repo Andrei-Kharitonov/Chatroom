@@ -18,7 +18,7 @@
     "start:dev": "SET NODE_ENV=development && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "prestart:prod": "rimraf dist && npm run build",
-    "postinstall": "npm run prestart:prod",
+    "postinstall": "tsc --sourceMap false && npm run prestart:prod",
     "start": "SET NODE_ENV=production && node dist/server/main",
     "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
   },

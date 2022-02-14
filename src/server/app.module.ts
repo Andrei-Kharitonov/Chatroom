@@ -12,10 +12,10 @@ import { MessageModule } from './message/message.module';
   imports: [RenderModule.forRootAsync(
     Next({ dev: NODE_ENV == 'development' }),
     { viewsDir: null }),
-  MongooseModule.forRoot('mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/users?retryWrites=true&w=majority', {
+  MongooseModule.forRoot(process.env.MONGODB_USERS_URI || 'mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/users?retryWrites=true&w=majority', {
     connectionName: 'users'
   }),
-  MongooseModule.forRoot('mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/messages?retryWrites=true&w=majority', {
+  MongooseModule.forRoot(process.env.MONGODB_MESSAGES_URI || 'mongodb+srv://andrei:Chat13DB@chatroom.cfjcz.mongodb.net/messages?retryWrites=true&w=majority', {
     connectionName: 'messages'
   }),
   MulterModule.register({
