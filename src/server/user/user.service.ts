@@ -125,10 +125,11 @@ export class UserService {
 
   async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let removeAvatarPath = `files/avatars/${(await this.userModel.findById({ _id: id })).avatarPath}`;
+    let removedUser = await this.userModel.findById({ _id: id })
+    let removeAvatarPath = `files/avatars/${removedUser.avatarPath}`;
 
     if (user && user.post == Role.Admin) {
-      if (user.avatarPath.length) {
+      if (removedUser.avatarPath.length) {
         fs.unlinkSync(removeAvatarPath);
       }
 
