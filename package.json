@@ -19,7 +19,7 @@
     "start:debug": "nest start --debug --path ./tsconfig.server.json --watch",
     "prestart:prod": "rimraf dist && npm run build",
     "postinstall": "npm run prestart:prod",
-    "start": "SET NODE_ENV=production && node dist/server/main"
+    "start": "node dist/server/main"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
