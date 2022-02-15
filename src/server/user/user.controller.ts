@@ -24,7 +24,7 @@ export class UserController {
 
   @Get('/avatar/:imgpath')
   seeUploadedFile(@Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: './files' });
+    return res.sendFile(image, { root: './files/avatars' });
   }
 
   @Post('/create')
@@ -35,7 +35,7 @@ export class UserController {
   @Post('/upload-avatar')
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      destination: './files',
+      destination: './files/avatars',
       filename: editFileName,
     }),
     fileFilter: imageFileFilter,

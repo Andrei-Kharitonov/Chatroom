@@ -75,7 +75,7 @@ export class UserService {
 
   async uploadAvatar(login: string, password: string, lastAvatarPath: string, avatarPath: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let removeAvatarPath = `files/${lastAvatarPath}`;
+    let removeAvatarPath = `files/avatars/${lastAvatarPath}`;
 
     if (user) {
       if (lastAvatarPath.length) {
@@ -125,7 +125,7 @@ export class UserService {
 
   async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let removeAvatarPath = `files/${(await this.userModel.findById({ _id: id })).avatarPath}`;
+    let removeAvatarPath = `files/avatars/${(await this.userModel.findById({ _id: id })).avatarPath}`;
 
     if (user && user.post == Role.Admin) {
       if (user.avatarPath.length) {
@@ -143,7 +143,7 @@ export class UserService {
   async removeAccount(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
     let otherUsers = await this.getOtherUsers(login);
-    let removeAvatarPath = `files/${user.avatarPath}`;
+    let removeAvatarPath = `files/avatars/${user.avatarPath}`;
 
     if (user && otherUsers.length && user.post == Role.Admin) {
       if (user.avatarPath.length) {
