@@ -7,7 +7,6 @@ import { RootState } from '../../store/store';
 import { UserAPI } from '../../api/userApi';
 
 export default function CurrentUser(): JSX.Element {
-  let [avatarUrl, setAvatarUrl] = useState<string>();
   let user = useSelector((state: RootState) => state.currentUser.currentUser);
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let dispatch = useDispatch();
@@ -15,10 +14,6 @@ export default function CurrentUser(): JSX.Element {
   useEffect(() => {
     dispatch(getUserFromLocalStorage());
   }, []);
-
-  useEffect(() => {
-    setAvatarUrl(UserAPI.getAvatarPaht(user.avatarPath) ?? '');
-  }, [user]);
 
   useEffect(() => {
     if (isRegistred) {
@@ -40,7 +35,7 @@ export default function CurrentUser(): JSX.Element {
   return (
     <div className={styles.user}>
       <div className={styles.user__avatar}>
-        {avatarUrl?.length ? <img className={styles.user__avatar__img} src={avatarUrl} /> : ''}
+        {user.avatar.length ? <img className={styles.user__avatar__img} src={user.avatar} /> : ''}
       </div>
       <div className={styles.user__info}>
         <div className={styles.user__name}>

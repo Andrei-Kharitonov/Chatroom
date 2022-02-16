@@ -8,7 +8,7 @@ import styles from './styles/User.module.scss';
 interface UserProps {
   id: string,
   name: string,
-  avatarPath: string,
+  avatar: string,
   post: string,
   banned: boolean,
   setBan: (id: string) => Promise<void>,
@@ -17,10 +17,9 @@ interface UserProps {
   removeUser: (id: string) => Promise<void>
 }
 
-export default function User({ id, name, avatarPath, post, banned, setBan, setModerator, setAdmin, removeUser }: UserProps): JSX.Element {
+export default function User({ id, name, avatar, post, banned, setBan, setModerator, setAdmin, removeUser }: UserProps): JSX.Element {
   let [active, setActive] = useState(false);
   let [colorName, setColorName] = useState('inherit');
-  let [avatarUrl, setAvatarUrl] = useState('');
   let currentUser = useSelector((state: RootState) => state.currentUser.currentUser);
 
   useEffect(() => {
@@ -33,15 +32,11 @@ export default function User({ id, name, avatarPath, post, banned, setBan, setMo
     }
   });
 
-  useEffect(() => {
-    setAvatarUrl(UserAPI.getAvatarPaht(avatarPath) ?? '');
-  }, [avatarPath]);
-
   return (
     <div className={styles.user}>
       <div className={styles.user__body}>
         <div className={styles.user__avatar}>
-          {avatarUrl.length ? <img className={styles.user__avatar__img} src={avatarUrl} /> : ''}
+          {avatar.length ? <img className={styles.user__avatar__img} src={avatar} /> : ''}
         </div>
         <div className={styles.user__info}>
           <div className={styles.user__name} style={{ color: colorName }}>

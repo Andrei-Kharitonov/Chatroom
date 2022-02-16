@@ -10,7 +10,7 @@ let defaultUser: User = {
   _id: '1',
   login: 'Anonim',
   password: '000000',
-  avatarPath: '',
+  avatar: '',
   post: 'none',
   banned: false
 }

@@ -8,7 +8,7 @@ export class AppController {
 
   @Get('/favicon.ico')
   favicon(@Res() res) {
-    return res.sendFile('favicon.ico', { root: './static' })
+    return res.sendFile('favicon.ico', { root: './public' });
   }
 
   @Get('/sign-up')

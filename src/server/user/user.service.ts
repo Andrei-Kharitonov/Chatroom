@@ -73,20 +73,6 @@ export class UserService {
     }
   }
 
-  async uploadAvatar(login: string, password: string, lastAvatarPath: string, avatarPath: string): Promise<User | null> {
-    let user = await this.getByLogin(login, password);
-    let removeAvatarPath = `files/avatars/${lastAvatarPath}`;
-
-    if (user) {
-      if (lastAvatarPath.length) {
-        fs.unlinkSync(removeAvatarPath);
-      }
-      return await this.userModel.findOneAndUpdate({ login }, { avatarPath }, { new: true });
-    } else {
-      return null;
-    }
-  }
-
   async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {
     let user = await this.getByLogin(login, password);
     let bannedUser = await this.userModel.findById({ _id: id });
@@ -125,14 +111,8 @@ export class UserService {
 
   async removeUser(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
-    let removedUser = await this.userModel.findById({ _id: id })
-    let removeAvatarPath = `files/avatars/${removedUser.avatarPath}`;
 
     if (user && user.post == Role.Admin) {
-      if (removedUser.avatarPath.length) {
-        fs.unlinkSync(removeAvatarPath);
-      }
-
       await this.messageModel.deleteMany({ authorId: id });
 
       return await this.userModel.findByIdAndRemove({ _id: id });
@@ -144,13 +124,8 @@ export class UserService {
   async removeAccount(id: string, login: string, password: string): Promise<User | null> {
     let user = await this.getByLogin(login, password);
     let otherUsers = await this.getOtherUsers(login);
-    let removeAvatarPath = `files/avatars/${user.avatarPath}`;
 
     if (user && otherUsers.length && user.post == Role.Admin) {
-      if (user.avatarPath.length) {
-        fs.unlinkSync(removeAvatarPath);
-      }
-
       let randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
 
       await this.messageModel.deleteMany({ authorId: id });
@@ -158,10 +133,6 @@ export class UserService {
 
       return await this.userModel.findByIdAndRemove({ _id: id });
     } else if (user) {
-      if (user.avatarPath.length) {
-        fs.unlinkSync(removeAvatarPath);
-      }
-
       await this.messageModel.deleteMany({ authorId: id });
 
       return await this.userModel.findByIdAndRemove({ _id: id });
@@ -174,7 +145,7 @@ export class UserService {
     return {
       _id: user._id,
       login: user.login,
-      avatarPath: user.avatarPath,
+      avatar: user.avatar,
       post: user.post,
       banned: user.banned
     }

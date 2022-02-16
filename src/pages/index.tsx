@@ -36,16 +36,16 @@ function Main({ users, messages }: MainPageProps): JSX.Element {
     }
   }, [isRegistred]);
 
-  function getAuthorData(authorId: string): { name: string, avatarUrl: string } {
+  function getAuthorData(authorId: string): { name: string, avatar: string } {
     let userData = {
       name: 'none',
-      avatarUrl: ''
+      avatar: ''
     }
 
     userList.map(user => {
       if (user._id == authorId) {
         userData.name = user.login;
-        userData.avatarUrl = user.avatarPath;
+        userData.avatar = user.avatar;
       }
     });
 

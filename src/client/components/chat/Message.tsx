@@ -1,4 +1,3 @@
-import { UserAPI } from '../../api/userApi';
 import { Role } from '../../types/Roles';
 import { User } from '../../types/User';
 import styles from './styles/Message.module.scss';
@@ -9,11 +8,11 @@ interface MessageProps {
   id: string,
   removeMessage: (id: string) => Promise<void>,
   authorName: string,
-  avatarUrl: string,
+  avatar: string,
   currentUser: User
 }
 
-export default function Message({ text, date, id, removeMessage, avatarUrl, authorName, currentUser }: MessageProps): JSX.Element {
+export default function Message({ text, date, id, removeMessage, avatar, authorName, currentUser }: MessageProps): JSX.Element {
   if (authorName == currentUser.login) {
     return (
       <div className={styles.MyMessage}>
@@ -24,7 +23,7 @@ export default function Message({ text, date, id, removeMessage, avatarUrl, auth
           </div>
         </div>
         <p className={styles.text}>{text}</p>
-        <div className={styles.date}>{new Date(date).toLocaleTimeString() + ', ' + new Date(date).toLocaleDateString()}</div>
+        <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );
   } else {
@@ -32,7 +31,7 @@ export default function Message({ text, date, id, removeMessage, avatarUrl, auth
       <div className={styles.message}>
         <div className={styles.message__author}>
           <div className={styles.message__authorAvatar}>
-            {avatarUrl.length ? <img className={styles.message__authorAvatar__img} src={UserAPI.getAvatarPaht(avatarUrl)!} /> : ''}
+            {avatar.length ? <img className={styles.message__authorAvatar__img} src={avatar} /> : ''}
           </div>
           <div className={styles.messageHeader}>
             <div className={styles.message__authorName}>
@@ -44,7 +43,7 @@ export default function Message({ text, date, id, removeMessage, avatarUrl, auth
           </div>
         </div>
         <p className={styles.text}>{text}</p>
-        <div className={styles.date}>{new Date(date).toLocaleTimeString() + ', ' + new Date(date).toLocaleDateString()}</div>
+        <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );
   }

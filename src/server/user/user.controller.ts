@@ -22,30 +22,9 @@ export class UserController {
     return this.userService.getByLogin(user.login, user.password);
   }
 
-  @Get('/avatar/:imgpath')
-  seeUploadedFile(@Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: './files/avatars' });
-  }
-
   @Post('/create')
   createUser(@Body() createUserDto: CreateUserDto): Promise<User | null> {
     return this.userService.create(createUserDto);
-  }
-
-  @Post('/upload-avatar')
-  @UseInterceptors(FileInterceptor('image', {
-    storage: diskStorage({
-      destination: './files/avatars',
-      filename: editFileName,
-    }),
-    fileFilter: imageFileFilter,
-  }))
-  uploadAvatar(@Query() user: Record<string, any>, @UploadedFile() file: Express.Multer.File): Promise<User | null> {
-    let response = {
-      originalname: file.originalname,
-      filename: file.filename,
-    };
-    return this.userService.uploadAvatar(user.login, user.password, user.lastAvatarPath, response.filename);
   }
 
   @Put('/update')

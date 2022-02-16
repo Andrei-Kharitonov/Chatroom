@@ -10,7 +10,7 @@ export class SecurityUser {
   login: string;
 
   @Prop({ default: '' })
-  avatarPath: string;
+  avatar: string;
 
   @Prop({ default: 'user' })
   post: Role;

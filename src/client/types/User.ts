@@ -2,7 +2,7 @@ export interface User {
   readonly _id: string,
   login: string,
   password: string,
-  avatarPath: string,
+  avatar: string,
   post: string,
   banned: boolean
 }
@@ -10,7 +10,7 @@ export interface User {
 export interface SecurityUser {
   readonly _id: string,
   login: string,
-  avatarPath: string,
+  avatar: string,
   post: string,
   banned: boolean
 }

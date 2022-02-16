@@ -10,7 +10,7 @@ import { MessageAPI } from '../../api/messageApi';
 
 interface ChatProps {
   messages: MessageI[],
-  getAuthorData: (authorId: string) => { name: string, avatarUrl: string }
+  getAuthorData: (authorId: string) => { name: string, avatar: string }
 }
 
 export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Element {
@@ -66,7 +66,7 @@ export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Elemen
                   id={message._id}
                   removeMessage={removeMessage}
                   authorName={getAuthorData(message.authorId).name}
-                  avatarUrl={getAuthorData(message.authorId).avatarUrl}
+                  avatar={getAuthorData(message.authorId).avatar}
                   currentUser={currentUser}
                 />
               </li>

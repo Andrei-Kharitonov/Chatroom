@@ -4,7 +4,8 @@ import { serverUrl } from "./serverUrl";
 
 interface UpdatedUser {
   login: string,
-  password: string
+  password: string,
+  avatar: string
 }
 
 export class UserAPI {
@@ -16,14 +17,6 @@ export class UserAPI {
     return (await axios.get(`${serverUrl}/user/get-by-login?login=${login}&password=${password}`)).data;
   }
 
-  static getAvatarPaht(avatarPath: string | undefined): string | null {
-    if (avatarPath && avatarPath.length) {
-      return `${serverUrl}/user/avatar/${avatarPath}`;
-    } else {
-      return null;
-    }
-  }
-
   static async create(login: string, password: string): Promise<User | null> {
     return (await axios.post(`${serverUrl}/user/create`, {
       login, password
@@ -31,15 +24,7 @@ export class UserAPI {
   }
 
   static async update(login: string, password: string, updatedUser: UpdatedUser): Promise<User | null> {
-    return (await axios.put(`${serverUrl}/user/update?login=${login}&password=${password}`, {
-      login: updatedUser.login,
-      password: updatedUser.password
-    })).data;
-  }
-
-  static async uploadAvatar(login: string, password: string, lastAvatarPath: string, avatar: FormData): Promise<User | null> {
-    let removedAvatarPath = lastAvatarPath.length ? lastAvatarPath : '';
-    return (await axios.post(`${serverUrl}/user/upload-avatar?login=${login}&password=${password}&lastAvatarPath=${removedAvatarPath}`, avatar)).data;
+    return (await axios.put(`${serverUrl}/user/update?login=${login}&password=${password}`, updatedUser)).data;
   }
 
   static async setBan(id: string, login: string, password: string): Promise<SecurityUser | null> {

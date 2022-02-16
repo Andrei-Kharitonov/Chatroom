@@ -17,6 +17,7 @@
     "start:next": "next dev",
     "start:dev": "SET NODE_ENV=development && nest start --path ./tsconfig.server.json --watch",
     "start:debug": "nest start --debug --path ./tsconfig.server.json --watch",
+    "start:build": "npm run build && npm run start",
     "prestart:prod": "rimraf dist && npm run build",
     "postinstall": "npm run prestart:prod",
     "start": "node dist/server/main"
@@ -33,6 +34,7 @@
     "multer": "^1.4.4",
     "nest-next": "^9.6.0",
     "next": "^12.0.10",
+    "next-pwa": "^5.4.4",
     "normalize.css": "^8.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

@@ -14,29 +14,30 @@ export default function Profile(): JSX.Element {
   let isRegistred = useSelector((state: RootState) => state.currentUser.isRegistred);
   let [newName, setNewName] = useState(user.login);
   let [newPwd, setNewPwd] = useState(user.password);
-  let [avatar, setAvatar] = useState<FormData>();
   let [isNewAvatar, setIsNewAvatar] = useState(false);
-  let [avatarUrl, setAvatarUrl] = useState<string>();
+  let [avatar, setAvatar] = useState('');
 
   useEffect(() => {
     setNewName(user.login);
     setNewPwd(user.password);
-    setAvatarUrl(UserAPI.getAvatarPaht(user.avatarPath) ?? '');
+    setAvatar(user.avatar ?? '');
   }, [isRegistred]);
 
   async function changeAvatar(e: ChangeEvent<HTMLInputElement>): Promise<void> {
     let file = e.target.files ? e.target.files[0] : null;
 
     if (file) {
-      let formData = new FormData();
       let reader = new FileReader();
+      reader.onloadend = () => {
+        if (new Blob([reader.result]).size < 1571864) {
+          setAvatar(reader.result as string);
+        } else {
+          alert('Слишком большой файл. Выберети файл не больше 1.5 Mb!');
+        }
 
-      formData.append("image", file);
-
-      reader.onloadend = () => setAvatarUrl(reader.result as string);
+      }
       reader.readAsDataURL(file);
 
-      setAvatar(formData);
       setIsNewAvatar(true);
     }
   }
@@ -48,16 +49,11 @@ export default function Profile(): JSX.Element {
       return;
     }
 
-    let updateData = {
+    let updatedUser = await UserAPI.update(user.login, user.password, {
       login: newName,
-      password: newPwd
-    }
-
-    if (avatar && avatarUrl != user.avatarPath) {
-      await UserAPI.uploadAvatar(user.login, user.password, user.avatarPath, avatar);
-      setIsNewAvatar(false);
-    }
-    let updatedUser = await UserAPI.update(user.login, user.password, updateData);
+      password: newPwd,
+      avatar
+    });
 
     if (updatedUser) {
       dispatch(setUser(updatedUser));
@@ -96,7 +92,7 @@ export default function Profile(): JSX.Element {
       <form className={styles.body} onSubmit={updateAccount}>
         <div className={styles.userAvatar}>
           <div className={styles.avatar}>
-            {avatarUrl ? <img className={styles.avatar__img} src={avatarUrl} /> : ''}
+            {avatar.length ? <img className={styles.avatar__img} src={avatar} /> : ''}
           </div>
           <div className={styles.inputImg}>
             <input type="file" accept="image/*" disabled={!isRegistred} onChange={changeAvatar} />
