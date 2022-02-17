@@ -1,15 +1,10 @@
-import { Controller, Get, Render, Res } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   @Get('/')
   @Render('index')
   home() { }
-
-  @Get('/favicon.ico')
-  favicon(@Res() res) {
-    return res.sendFile('favicon.ico', { root: './public' });
-  }
 
   @Get('/sign-up')
   @Render('sign-up')

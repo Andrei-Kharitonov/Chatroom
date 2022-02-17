@@ -15,9 +15,6 @@
     overflow: auto;
     padding: 30px 10px;
     height: 100%;
-    @media (max-width: 600px) {
-      padding: 80px 10px;
-    }
     li {
       display: flex;
     }
