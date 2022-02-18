@@ -44,10 +44,6 @@ export default function Profile(): JSX.Element {
 
   async function updateAccount(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-    if (newName.length > 25) {
-      alert("Слишком длинное имя!");
-      return;
-    }
 
     let updatedUser = await UserAPI.update(user.login, user.password, {
       login: newName,
@@ -94,7 +90,7 @@ export default function Profile(): JSX.Element {
           <div className={styles.avatar}>
             {avatar.length ? <img className={styles.avatar__img} src={avatar} /> : ''}
           </div>
-          <div className={styles.inputImg}>
+          <div className={isRegistred ? styles.inputImg : styles.inputImg + ' ' + styles.inputImg_disabled}>
             <input type="file" accept="image/*" disabled={!isRegistred} onChange={changeAvatar} />
             <label className="btn">Выбрать фото</label>
           </div>

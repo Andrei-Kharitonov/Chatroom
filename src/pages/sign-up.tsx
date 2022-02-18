@@ -28,7 +28,7 @@ export default function SignUp(): JSX.Element {
       <Auth btnText="Зарегистрироваться" getUser={createUser} />
       <p className={styles.text}>
         <Link href="/sign-in">
-          <a>
+          <a className='link'>
             Войдите в аккаунт
           </a>
         </Link>

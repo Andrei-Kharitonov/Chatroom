@@ -10,11 +10,11 @@ export default function Help(): JSX.Element {
         <p className={styles.section__text}>
           Чтобы начать работать с Chatroom, необходимо&nbsp;
           <Link href='/sign-up'>
-            <a>создать аккаунт</a>
+            <a className='link'>создать аккаунт</a>
           </Link>
           &nbsp;или&nbsp;
           <Link href='/sign-in'>
-            <a>войти в уже существующий.</a>
+            <a className='link'>войти в уже существующий.</a>
           </Link>
         </p>
       </div>

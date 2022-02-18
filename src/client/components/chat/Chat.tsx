@@ -20,7 +20,7 @@ export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Elemen
 
   useEffect(() => {
     setMessageList(messages);
-  }, [messages]);
+  }, [messages.length]);
 
   useEffect(() => {
     scrollChat();
@@ -81,7 +81,7 @@ export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Elemen
       <div className={styles.chat}>
         <h3 style={{ textAlign: 'center' }}>
           <Link href='/sign-in'>
-            <a>Войдите в аккаунт</a>
+            <a className='link'>Войдите в аккаунт</a>
           </Link>
           &nbsp;чтобы увидеть сообщения.
         </h3>

@@ -1,5 +1,6 @@
 import { Role } from '../../types/Roles';
 import { User } from '../../types/User';
+import MessageWord from './MessageWord';
 import styles from './styles/Message.module.scss';
 
 interface MessageProps {
@@ -17,12 +18,20 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
     return (
       <div className={styles.MyMessage}>
         <div className={styles.messageHeader}>
-          <div className={styles.deleteBtn} onClick={() => removeMessage(id)} data-title="Удалить">&#10006;</div>
+          <div className={styles.deleteBtn} onClick={() => removeMessage(id)}>&#10006;</div>
           <div className={styles.MyMessage__author}>
             Вы
           </div>
         </div>
-        <p className={styles.text}>{text}</p>
+        <ul className={styles.text}>{
+          text.split(' ').map((word, index) => {
+            return (
+              <li key={index.toString()} style={{ display: 'inline' }}>
+                <MessageWord word={word} />
+              </li>
+            );
+          })
+        }</ul>
         <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );
@@ -38,11 +47,19 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
               {authorName}
             </div>
             {currentUser.post == Role.Admin || currentUser.post == Role.Moderator
-              ? <div className={styles.deleteBtn} onClick={() => removeMessage(id)} data-title="Удалить">&#10006;</div>
+              ? <div className={styles.deleteBtn} onClick={() => removeMessage(id)}>&#10006;</div>
               : ''}
           </div>
         </div>
-        <p className={styles.text}>{text}</p>
+        <ul className={styles.text}>{
+          text.split(' ').map((word, index) => {
+            return (
+              <li key={index.toString()} style={{ display: 'inline' }}>
+                <MessageWord word={word} />
+              </li>
+            );
+          })
+        }</ul>
         <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );
