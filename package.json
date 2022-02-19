@@ -30,6 +30,7 @@
     "@nestjs/serve-static": "^2.2.2",
     "@reduxjs/toolkit": "^1.7.2",
     "axios": "^0.25.0",
+    "compressorjs": "^1.1.1",
     "mongo-gridfs": "^1.1.0",
     "mongoose": "^6.2.1",
     "multer": "^1.4.4",

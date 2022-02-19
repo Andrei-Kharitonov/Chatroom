@@ -1,9 +1,10 @@
 import Router from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import Compressor from 'compressorjs';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from '../client/styles/ProfilePage.module.scss';
 import { Role } from '../client/types/Roles';
 import { User } from '../client/types/User';
-import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setDefaultUser } from '../client/store/currentUserSlice';
 import { RootState } from '../client/store/store';
 import { UserAPI } from '../client/api/userApi';
@@ -26,20 +27,29 @@ export default function Profile(): JSX.Element {
   async function changeAvatar(e: ChangeEvent<HTMLInputElement>): Promise<void> {
     let file = e.target.files ? e.target.files[0] : null;
 
-    if (file) {
-      let reader = new FileReader();
-      reader.onloadend = () => {
-        if (new Blob([reader.result]).size < 1571864) {
-          setAvatar(reader.result as string);
-        } else {
-          alert('Слишком большой файл. Выберети файл не больше 1.5 Mb!');
-        }
-
-      }
-      reader.readAsDataURL(file);
-
-      setIsNewAvatar(true);
+    if (!file) {
+      return;
     }
+
+    new Compressor(file, {
+      quality: 0.4,
+      minWidth: 140,
+      minHeight: 140,
+      maxWidth: 300,
+      maxHeight: 300,
+
+      success(result: File) {
+        let reader = new FileReader();
+        reader.readAsDataURL(result);
+        reader.onload = () => setAvatar(reader.result as string);
+
+        setIsNewAvatar(true);
+      },
+      error(err) {
+        alert('Ошибка при загрузке файла! ' + err.message);
+      }
+    });
+
   }
 
   async function updateAccount(event: FormEvent<HTMLFormElement>): Promise<void> {
