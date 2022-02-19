@@ -1,6 +1,6 @@
 import { Role } from '../../types/Roles';
 import { User } from '../../types/User';
-import MessageWord from './MessageWord';
+import MessageText from './MessageText';
 import styles from './styles/Message.module.scss';
 
 interface MessageProps {
@@ -23,15 +23,9 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
             Вы
           </div>
         </div>
-        <ul className={styles.text}>{
-          text.split(' ').map((word, index) => {
-            return (
-              <li key={index.toString()} style={{ display: 'inline' }}>
-                <MessageWord word={word} />
-              </li>
-            );
-          })
-        }</ul>
+        <div className={styles.text}>
+          <MessageText text={text} />
+        </div>
         <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );
@@ -51,15 +45,9 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
               : ''}
           </div>
         </div>
-        <ul className={styles.text}>{
-          text.split(' ').map((word, index) => {
-            return (
-              <li key={index.toString()} style={{ display: 'inline' }}>
-                <MessageWord word={word} />
-              </li>
-            );
-          })
-        }</ul>
+        <div className={styles.text}>
+          <MessageText text={text} />
+        </div>
         <div className={styles.date}>{new Date(date).toLocaleString()}</div>
       </div>
     );

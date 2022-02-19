@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/dist/client/link';
 import { useDispatch, useSelector } from "react-redux";
 import { getUserFromLocalStorage, setDefaultUser, setUser } from '../../store/currentUserSlice';
