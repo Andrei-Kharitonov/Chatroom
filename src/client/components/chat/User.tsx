@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { UserAPI } from '../../api/userApi';
 import { RootState } from '../../store/store';
 import { Role } from '../../types/Roles';
 import styles from './styles/User.module.scss';

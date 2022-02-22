@@ -34,8 +34,8 @@ export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Elemen
     }
   }
 
-  async function addMessage(text: string, currentUserId: string): Promise<void> {
-    let newMessage = await MessageAPI.create(text, currentUserId);
+  async function addMessage(text: string, image: string, currentUserId: string): Promise<void> {
+    let newMessage = await MessageAPI.create(text, image, currentUserId);
 
     setMessageList([...messageList, newMessage]);
     scrollChat();
@@ -62,6 +62,7 @@ export default function Chat({ messages, getAuthorData }: ChatProps): JSX.Elemen
               <li className={styles.list} key={message._id}>
                 <Message
                   text={message.text}
+                  image={message.image}
                   date={message.date}
                   id={message._id}
                   removeMessage={removeMessage}

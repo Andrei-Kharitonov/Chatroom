@@ -11,8 +11,11 @@ export class Message {
   @Prop()
   authorId: string;
 
-  @Prop()
+  @Prop({ default: '' })
   text: string;
+
+  @Prop({ default: '' })
+  image: string;
 
   @Prop()
   date: number;

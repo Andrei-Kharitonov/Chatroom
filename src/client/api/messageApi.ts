@@ -7,9 +7,9 @@ export class MessageAPI {
     return (await axios.get(`${serverUrl}/message/get-all`)).data;
   }
 
-  static async create(text: string, authorId: string): Promise<Message> {
+  static async create(text: string, image: string, authorId: string): Promise<Message> {
     return (await axios.post(`${serverUrl}/message/create`, {
-      authorId, text
+      authorId, text, image
     })).data;
   }
 

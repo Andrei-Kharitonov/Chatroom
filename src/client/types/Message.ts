@@ -2,5 +2,6 @@ export interface Message {
   readonly _id: string,
   readonly authorId: string,
   text: string,
-  date: Date
+  image: string,
+  date: number
 }

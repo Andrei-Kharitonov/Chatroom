@@ -24,7 +24,7 @@ export default function Profile(): JSX.Element {
     setAvatar(user.avatar ?? '');
   }, [isRegistred]);
 
-  async function changeAvatar(e: ChangeEvent<HTMLInputElement>): Promise<void> {
+  function changeAvatar(e: ChangeEvent<HTMLInputElement>): void {
     let file = e.target.files ? e.target.files[0] : null;
 
     if (!file) {

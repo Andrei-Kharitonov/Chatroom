@@ -1,12 +1,9 @@
-import { Body, Controller, Get, Put, Post, Query, Delete, Param, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { Body, Controller, Get, Put, Post, Query, Delete, Param } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schemas';
 import { SecurityUser } from './schemas/security-user.schemas';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { editFileName, imageFileFilter } from '../utils/file-uploading.utils';
 
 @Controller('user')
 export class UserController {

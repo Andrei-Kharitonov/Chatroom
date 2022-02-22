@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { Role } from '../../types/Roles';
 import { User } from '../../types/User';
 import MessageText from './MessageText';
+import Modal from './Modal';
 import styles from './styles/Message.module.scss';
 
 interface MessageProps {
   text: string,
-  date: Date,
+  image: string,
+  date: number,
   id: string,
   removeMessage: (id: string) => Promise<void>,
   authorName: string,
@@ -13,7 +16,13 @@ interface MessageProps {
   currentUser: User
 }
 
-export default function Message({ text, date, id, removeMessage, avatar, authorName, currentUser }: MessageProps): JSX.Element {
+interface MessageBodyProps {
+  text: string,
+  image: string,
+  date: number
+}
+
+export default function Message({ text, image, date, id, removeMessage, avatar, authorName, currentUser }: MessageProps): JSX.Element {
   if (authorName == currentUser.login) {
     return (
       <div className={styles.MyMessage}>
@@ -23,10 +32,7 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
             Вы
           </div>
         </div>
-        <div className={styles.text}>
-          <MessageText text={text} />
-        </div>
-        <div className={styles.date}>{new Date(date).toLocaleString()}</div>
+        <MessageBody text={text} image={image} date={date} />
       </div>
     );
   } else {
@@ -45,11 +51,31 @@ export default function Message({ text, date, id, removeMessage, avatar, authorN
               : ''}
           </div>
         </div>
-        <div className={styles.text}>
-          <MessageText text={text} />
-        </div>
-        <div className={styles.date}>{new Date(date).toLocaleString()}</div>
+        <MessageBody text={text} image={image} date={date} />
       </div>
     );
   }
+}
+
+function MessageBody({ text, image, date }: MessageBodyProps): JSX.Element {
+  let [modalActive, setModalActive] = useState(false);
+  let dateString = new Date(date).toLocaleTimeString().slice(0, 5) + ', ' + new Date(date).toLocaleDateString();
+
+  function onModalClose() {
+    setModalActive(false);
+  }
+
+  return (
+    <>
+      <div className={styles.text}>
+        <MessageText text={text} />
+      </div>
+      {image.length ?
+        <div className={styles.image} onClick={() => setModalActive(true)}>
+          <img className={styles.image__img} src={image} />
+        </div> : ''}
+      <div className={styles.date}>{dateString}</div>
+      <Modal visible={modalActive} image={image} onClose={onModalClose} />
+    </>
+  );
 }
